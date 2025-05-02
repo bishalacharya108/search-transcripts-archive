@@ -27,9 +27,9 @@
 
 ## 🔁 Data Flow
 
-User / Contributor → Markdown Editor → API Routes → MongoDB
-Admin UI Interface → API Routes → MongoDB
-User → API Routes → MongoDB → UI
+(User / Contributor → Markdown Editor → API Routes → MongoDB)
+(Admin UI Interface → API Routes → MongoDB)
+(User → API Routes → MongoDB → UI)
 
 
 ---
@@ -45,6 +45,7 @@ User → API Routes → MongoDB → UI
 - **Mongoose**
 - **Vercel**
 - **Auth0**
+- **zod**
 - _Prisma?_ (consideration)
 
 ---
