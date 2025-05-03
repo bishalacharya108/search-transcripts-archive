@@ -35,7 +35,7 @@ const TranscriptionPage: NextPage = () => {
 
     try {
 
-      // using axios instead
+      // using axios here
       await axios.post("/api/transcription", {
         title,
         markdown,
@@ -49,7 +49,11 @@ const TranscriptionPage: NextPage = () => {
 
       alert("Transcription created successfully for review!");
     } catch (error) {
-      setError((error as Error).message || "An unknown error occurred.");
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.message || "Failed to create transcription.");
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }
