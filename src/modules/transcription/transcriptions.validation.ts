@@ -10,7 +10,7 @@ export const TranscriptValidationSchema = z.object({
 
   markdown: z.string()
     
-    .max(10000, "Content too long (max 10,000 characters)"),
+    .max(50000, "Content too long (max 50,000 characters)"),//arbitarily selected 50,000
 
   videoUrl: z.string()
     .url("Invalid URL format")

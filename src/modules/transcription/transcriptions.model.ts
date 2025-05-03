@@ -17,7 +17,7 @@ const TranscriptSchema = new Schema<TTranscript>({
     type: String,
     validate: {
       validator: (v: string) => {
-        return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/.test(v);
+        return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+/.test(v);
       },
       message: "Invalid YouTube URL"
     }

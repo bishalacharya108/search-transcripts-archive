@@ -27,8 +27,8 @@
 
 ## 🔁 Data Flow
 
-(User / Contributor → Markdown Editor → API Routes → MongoDB)
-(Admin UI Interface → API Routes → MongoDB)
+(User / Contributor → Markdown Editor → API Routes → MongoDB),
+(Admin UI Interface → API Routes → MongoDB),
 (User → API Routes → MongoDB → UI)
 
 
@@ -46,9 +46,12 @@
 - **Vercel**
 - **Auth0**
 - **zod**
-- _Prisma?_ (consideration)
+- _Prisma?_ (not sure)
 
 ---
 
 ## 🌐 Plans for Future
 - Translation Projects
+
+## Done already:
+- CRUD operation for Transcription

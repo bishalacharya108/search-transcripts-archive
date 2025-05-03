@@ -1,16 +1,19 @@
-"use client"
-import { useState } from 'react';
-import { NextPage } from 'next';
-
+"use client";
+import { useState } from "react";
+import { NextPage } from "next";
 
 const TranscriptionPage: NextPage = () => {
-  const [title, setTitle] = useState<string>('');
-  const [markdown, setMarkdown] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [title, setTitle] = useState<string>("");
+  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [markdown, setMarkdown] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+  const handleVideoUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVideoUrl(e.target.value);
   };
 
   const handleMarkdownChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -20,48 +23,51 @@ const TranscriptionPage: NextPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title || !markdown) {
-      setError('Title and transcription content are required.');
+    if (!title || !markdown || !videoUrl) {
+      setError("Title and transcription content are required.");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-     
-      const response = await fetch('/api/transcription', {
-        method: 'POST',
+      const response = await fetch("/api/transcription", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, markdown }),
+        body: JSON.stringify({ title, markdown, videoUrl }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create transcription.');
+        throw new Error("Failed to create transcription.");
       }
 
-    
-      setTitle('');
-      setMarkdown('');
-      alert('Transcription created successfully!');
+      setTitle("");
+      setMarkdown("");
+      setVideoUrl("");
+
+      alert("Transcription created successfully!");
     } catch (error) {
-      setError(error.message);
+      setError((error as Error).message || "An unknown error occurred.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="mx-auto p-4 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Create a Transcription</h1>
+    <div className="mx-auto p-4 shadow-md rounded-lg mb-4 mx-5">
+      <h1 className="text-2xl font-bold mb-4">Submit your Transcription</h1>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-lg font-medium text-gray-700">
+          <label
+            htmlFor="title"
+            className="block text-lg font-medium text-gray-300"
+          >
             Title
           </label>
           <input
@@ -73,9 +79,25 @@ const TranscriptionPage: NextPage = () => {
             placeholder="Enter the transcription title"
           />
         </div>
+        <div className="mb-4">
+          <label htmlFor="videoUrl" className="label">
+            <span className="label-text">Video URL</span>
+          </label>
+          <input
+            type="text"
+            id="videoUrl"
+            value={videoUrl}
+            onChange={handleVideoUrlChange}
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Enter the video url"
+          />
+        </div>
 
         <div className="mb-4">
-          <label htmlFor="markdown" className="block text-lg font-medium text-gray-700">
+          <label
+            htmlFor="markdown"
+            className="block text-lg font-medium text-gray-300"
+          >
             Transcription Content (Markdown)
           </label>
           <textarea
@@ -83,7 +105,7 @@ const TranscriptionPage: NextPage = () => {
             value={markdown}
             onChange={handleMarkdownChange}
             rows={10}
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 h-55"
             placeholder="Enter transcription content in Markdown format"
           />
         </div>
@@ -91,9 +113,11 @@ const TranscriptionPage: NextPage = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md ${loading ? 'opacity-50' : 'hover:bg-indigo-700'}`}
+          className={`w-full btn py-2 px-4 btn-success text-white rounded-md shadow-md ${
+            loading ? "opacity-50" : "hover:bg-indigo-700"
+          }`}
         >
-          {loading ? 'Submitting...' : 'Create Transcription'}
+          {loading ? "Submitting..." : "Submit Transcription"}
         </button>
       </form>
     </div>
