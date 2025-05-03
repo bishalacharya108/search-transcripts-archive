@@ -1,3 +1,4 @@
+import { TranscriptValidationSchema } from './../../../modules/transcription/transcriptions.validation';
 import { NextRequest, NextResponse } from "next/server";
 
 import connectDB from "@/config/db";
@@ -7,7 +8,8 @@ export async function POST(req: NextRequest) {
   await connectDB();
   try {
     const data = await req.json();
-    const result = await TranscriptControllers.createTranscript(data);
+    const validatedData = TranscriptValidationSchema.parse(data);
+    const result = await TranscriptControllers.createTranscript(validatedData);
 
     return NextResponse.json(
       {
@@ -29,4 +31,3 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// export function async GET
