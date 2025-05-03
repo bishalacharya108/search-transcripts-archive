@@ -9,20 +9,28 @@ const TranscriptSchema = new Schema<TTranscript>({
     trim: true,
   },
   markdown: {
-    type: String,
-    required: true,
+    type: String, 
+    required: [true, "Content is required"],
+    minlength: [100, "Content must be at least 100 characters"]
   },
-  videoUrl: {
+  videoUrl: { 
     type: String,
-    required: false,
-  },
-  speaker: {
-    type: String,
-    required: false,
+    validate: {
+      validator: (v: string) => {
+        return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/.test(v);
+      },
+      message: "Invalid YouTube URL"
+    }
   },
   tags: {
     type: [String],
     default: [],
+  },
+  status: {
+    type: String,
+    enum: ["pending", "approved"],
+    default: "pending",
+    index: true // For faster querying
   },
   uploadedAt: {
     type: Date,

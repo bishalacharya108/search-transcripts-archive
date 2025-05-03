@@ -5,6 +5,7 @@ export type TTranscript = {
   speaker?: string;
   tags: string[];
   uploadedAt: Date;
+  status: 'pending' | 'approved';
 };
 
 // For mongoose

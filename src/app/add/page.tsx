@@ -1,9 +1,8 @@
-// pages/transcription.tsx (or any other component you want to use)
 "use client"
 import { useState } from 'react';
 import { NextPage } from 'next';
 
-// Simple UI for Transcription input
+
 const TranscriptionPage: NextPage = () => {
   const [title, setTitle] = useState<string>('');
   const [markdown, setMarkdown] = useState<string>('');
@@ -30,7 +29,7 @@ const TranscriptionPage: NextPage = () => {
     setError('');
 
     try {
-      // Send POST request with the transcription data
+     
       const response = await fetch('/api/transcription', {
         method: 'POST',
         headers: {
@@ -43,7 +42,7 @@ const TranscriptionPage: NextPage = () => {
         throw new Error('Failed to create transcription.');
       }
 
-      // Reset state after successful submission
+    
       setTitle('');
       setMarkdown('');
       alert('Transcription created successfully!');

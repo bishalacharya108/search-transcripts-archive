@@ -1,16 +1,30 @@
 // import { TTranscript } from "../transcriptions.interface";
+import { Types } from "mongoose";
 import { TTranscript } from "./transcriptions.interface";
 import { Transcript } from "./transcriptions.model";
 
 const  createTranscriptIntoDB = async(transcript: TTranscript) => {
-    try{
+
         const newTranscript = new Transcript(transcript);
         return await newTranscript.save();
-    }
-    catch(err){
-        throw new Error("Error creating transcript into db");
-    }
+
+   
+}
+
+const getAllTranscriptionsFromDB = async() =>{
+
+        const result = await Transcript.find();
+        return result;
+
+
+}
+const getATranscriptionFromDB = async(id: string | Types.ObjectId) =>{
+
+        const result = await Transcript.findById(id).lean();
+        return result;
+
+
 }
 
 
-export const TranscriptServices = {createTranscriptIntoDB}
+export const TranscriptServices = {createTranscriptIntoDB, getAllTranscriptionsFromDB, getATranscriptionFromDB}
