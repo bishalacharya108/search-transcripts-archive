@@ -46,6 +46,8 @@
 - **Vercel**
 - **Auth0**
 - **zod**
+- **axios**
+- **tanstackquery**
 - _Prisma?_ (not sure)
 
 ---

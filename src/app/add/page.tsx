@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { NextPage } from "next";
+import axios from "axios";
 
 const TranscriptionPage: NextPage = () => {
   const [title, setTitle] = useState<string>("");
@@ -20,6 +21,7 @@ const TranscriptionPage: NextPage = () => {
     setMarkdown(e.target.value);
   };
 
+  // handle submit function for post
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -32,23 +34,20 @@ const TranscriptionPage: NextPage = () => {
     setError("");
 
     try {
-      const response = await fetch("/api/transcription", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, markdown, videoUrl }),
+
+      // using axios instead
+      await axios.post("/api/transcription", {
+        title,
+        markdown,
+        videoUrl,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to create transcription.");
-      }
-
+      // clearing the states after finishing upload
       setTitle("");
       setMarkdown("");
       setVideoUrl("");
 
-      alert("Transcription created successfully!");
+      alert("Transcription created successfully for review!");
     } catch (error) {
       setError((error as Error).message || "An unknown error occurred.");
     } finally {
@@ -63,6 +62,7 @@ const TranscriptionPage: NextPage = () => {
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit}>
+        {/* title section */}
         <div className="mb-4">
           <label
             htmlFor="title"
@@ -79,8 +79,13 @@ const TranscriptionPage: NextPage = () => {
             placeholder="Enter the transcription title"
           />
         </div>
+
+        {/* video url section */}
         <div className="mb-4">
-          <label htmlFor="videoUrl" className="label">
+          <label
+            htmlFor="videoUrl"
+            className="block text-lg font-medium text-gray-300"
+          >
             <span className="label-text">Video URL</span>
           </label>
           <input
@@ -89,10 +94,11 @@ const TranscriptionPage: NextPage = () => {
             value={videoUrl}
             onChange={handleVideoUrlChange}
             className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Enter the video url"
+            placeholder="Enter the youtube video url"
           />
         </div>
 
+        {/* markdown input section */}
         <div className="mb-4">
           <label
             htmlFor="markdown"
@@ -114,7 +120,7 @@ const TranscriptionPage: NextPage = () => {
           type="submit"
           disabled={loading}
           className={`w-full btn py-2 px-4 btn-success text-white rounded-md shadow-md ${
-            loading ? "opacity-50" : "hover:bg-indigo-700"
+            loading ? "opacity-50" : "hover:btn-accent"
           }`}
         >
           {loading ? "Submitting..." : "Submit Transcription"}
