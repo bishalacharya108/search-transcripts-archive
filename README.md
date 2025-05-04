@@ -10,6 +10,7 @@
 ### 📄 File Upload and Changes Management
 - Users can upload **Markdown** text
 - **Admin approval** required for submissions
+- **Admin can update documents before or after approval**
 - **Data validation** for all inputs
 - **History tracking** for all versions
 - **Draft status** for each upload, update, or reupload
@@ -27,9 +28,11 @@
 
 ## 🔁 Data Flow
 
-(User / Contributor → Markdown Editor → API Routes → MongoDB),
-(Admin UI Interface → API Routes → MongoDB),
-(User → API Routes → MongoDB → UI)
+(User / Contributor → Markdown Editor → API Routes → MongoDB {pending}),
+(Admin UI Interface → API Routes → MongoDB {approved}),
+(User → API Routes → MongoDB → UI),
+(User → Searches → Mongodb → UI )
+
 
 
 ---
@@ -48,6 +51,7 @@
 - **zod**
 - **axios**
 - **tanstackquery**
+- **JWT**
 - _Prisma?_ (not sure)
 
 ---
@@ -55,5 +59,4 @@
 ## 🌐 Plans for Future
 - Translation Projects
 
-## Done already:
-- CRUD operation for Transcription
+## Done already: (focusing on the backend rn)

@@ -9,7 +9,13 @@ export default function Navbar (){
         <Link href={"/add"}>Add Transcripts</Link>
       </li>
       <li>
-        <a>Item 3</a>
+        <Link href={"/login"}>Login</Link>
+      </li>
+      <li>
+        <Link href={"/register"}>Register</Link>
+      </li>
+      <li>
+        <Link href={"/"}>Contribute</Link>
       </li>
     </>
   );

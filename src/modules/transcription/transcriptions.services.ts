@@ -1,30 +1,48 @@
-// import { TTranscript } from "../transcriptions.interface";
-import { Types } from "mongoose";
+
+
+import mongoose, { Types } from "mongoose";
 import { TTranscript } from "./transcriptions.interface";
 import { Transcript } from "./transcriptions.model";
 
-const  createTranscriptIntoDB = async(transcript: TTranscript) => {
+const createTranscriptIntoDB = async (transcript: TTranscript) => {
+  const newTranscript = new Transcript(transcript);
+  return await newTranscript.save();
+};
 
-        const newTranscript = new Transcript(transcript);
-        return await newTranscript.save();
+const getAllTranscriptionsFromDB = async () => {
+  const result = await Transcript.find();
+  return result;
+};
+const getATranscriptionFromDB = async (id: string | Types.ObjectId) => {
+  const result = await Transcript.findById(id).lean();
+  return result;
+};
 
-   
-}
+const deleteTranscriptionFromDB = async (id: string | Types.ObjectId) => {
+  const result = await Transcript.deleteOne({
+    _id: new mongoose.Types.ObjectId(id),
+  });
 
-const getAllTranscriptionsFromDB = async() =>{
+  return result.deletedCount > 0;
+};
 
-        const result = await Transcript.find();
-        return result;
+const updateTranscriptionInDB = async (
+        id: string | Types.ObjectId,
+        updateData: Partial<typeof Transcript.prototype>
+      ) => {
+        const updatedTranscript = await Transcript.findByIdAndUpdate(
+          new mongoose.Types.ObjectId(id),
+          updateData,
+          { new: true, runValidators: true }
+        );
+      
+        return updatedTranscript; 
+      };
 
-
-}
-const getATranscriptionFromDB = async(id: string | Types.ObjectId) =>{
-
-        const result = await Transcript.findById(id).lean();
-        return result;
-
-
-}
-
-
-export const TranscriptServices = {createTranscriptIntoDB, getAllTranscriptionsFromDB, getATranscriptionFromDB}
+export const TranscriptServices = {
+  createTranscriptIntoDB,
+  getAllTranscriptionsFromDB,
+  getATranscriptionFromDB,
+  deleteTranscriptionFromDB,
+  updateTranscriptionInDB
+};
