@@ -1,3 +1,5 @@
+
+// felt more comfortable with directly using types instead of interfaces
 export type TTranscript = {
   title: string;
   markdown: string;

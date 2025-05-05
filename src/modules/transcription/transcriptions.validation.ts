@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+//TODO: add for odysee, rumble and bitchute as well
 const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
 
 export const TranscriptValidationSchema = z.object({

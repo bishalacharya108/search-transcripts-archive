@@ -2,6 +2,8 @@ import connectDB from "@/config/db";
 import { TranscriptServices } from "@/modules/transcription/transcriptions.services";
 
 import { NextRequest, NextResponse } from "next/server";
+
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -23,6 +25,7 @@ export async function GET(
             message: "Transcript Found!",
             data: data
         },{status: 200})
+
     }catch(error){
         console.error(`[GET /api/transcription/${params.id}]`, error);
         return NextResponse.json({
@@ -33,7 +36,7 @@ export async function GET(
     }
 }
 
-
+// update a single transcript based on id
 export async function PATCH(
     req: NextRequest,
     { params }: { params: { id: string } }
@@ -64,6 +67,7 @@ export async function PATCH(
     }
   }
   
+  // update a transcript based on id
   export async function DELETE(
     req: NextRequest,
     { params }: { params: { id: string } }
@@ -83,6 +87,7 @@ export async function PATCH(
         { success: true, message: "Transcript deleted successfully" },
         { status: 200 }
       );
+
     } catch (error) {
       console.error(`[DELETE /api/transcription/${params.id}]`, error);
       return NextResponse.json(

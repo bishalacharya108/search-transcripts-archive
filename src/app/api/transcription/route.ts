@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const validatedData = TranscriptValidationSchema.parse(data);
 
-    // getting data using controllers. still undecided on controllers functionalities in this case
+    // getting data using controllers. still undecided on the functionalities controllers in this case
+    // probably will delete controllers later and directly call from services
     const result = await TranscriptControllers.createTranscript(validatedData);
 
     return NextResponse.json(

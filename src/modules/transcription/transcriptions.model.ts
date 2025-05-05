@@ -17,6 +17,7 @@ const TranscriptSchema = new Schema<TTranscript>({
     type: String,
     validate: {
       validator: (v: string) => {
+        // need to add for the other platforms also
         return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+/.test(v);
       },
       message: "Invalid YouTube URL"
@@ -30,7 +31,7 @@ const TranscriptSchema = new Schema<TTranscript>({
     type: String,
     enum: ["pending", "approved"],
     default: "pending",
-    index: true // For faster querying
+    // index: true // For faster querying
   },
   uploadedAt: {
     type: Date,
@@ -41,4 +42,6 @@ const TranscriptSchema = new Schema<TTranscript>({
 // Infer document type
 export type TranscriptDocument = HydratedDocument<TTranscript>;
 
+
+// if model already exists then use that otherwise create a new one
 export const Transcript =  models.Transcript || model<TTranscript>("Transcript", TranscriptSchema);
