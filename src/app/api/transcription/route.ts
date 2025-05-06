@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/config/db";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 
+
 export async function POST(req: NextRequest) {
   await connectDB();
   try {
@@ -22,6 +23,9 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
+
+
+
   } catch (error) {
     return NextResponse.json(
       {

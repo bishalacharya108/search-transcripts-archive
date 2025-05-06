@@ -3,7 +3,7 @@ import { models } from "mongoose";
 import { TUser } from "./user.interface";
 import { Schema } from "mongoose";
 export const UserSchema = new Schema<TUser>({
-  name: {
+  userName: {
     type: String,
     required: true,
   },
@@ -23,6 +23,7 @@ export const UserSchema = new Schema<TUser>({
   },
   isVerified: {
     type: Boolean,
+    default: false
   },
   forgotPasswordToken: {
     type: String,

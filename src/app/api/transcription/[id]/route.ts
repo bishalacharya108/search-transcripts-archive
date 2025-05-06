@@ -10,7 +10,7 @@ export async function GET(
 ) {
     await connectDB();
     try{
-        // getting the transcript through services... here I realised I could directly call the service methods instead of controllers
+        // getting the transcript through services... here I realised I can directly call the service methods instead of controllers
         const data = await TranscriptServices.getATranscriptionFromDB(params?.id);
 
         if(!data){
