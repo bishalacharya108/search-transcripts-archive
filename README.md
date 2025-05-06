@@ -55,6 +55,7 @@
 - **axios**
 - **tanstackquery**
 - **JWT**
+- **Shadcn** | **DaisyUI** (?)
 
 ---
 

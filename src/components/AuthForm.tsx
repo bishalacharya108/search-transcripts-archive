@@ -5,6 +5,8 @@ type AuthFormProps = {
     buttonText: string;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     showName?: boolean; // true for register, expecting false by default
+    errorMessage: string;
+   
   };
   
 
@@ -14,6 +16,8 @@ type AuthFormProps = {
     buttonText,
     onSubmit,
     showName = false,
+    errorMessage,
+    
   }: AuthFormProps) {
     return (
       <div className="card bg-base-100 w-full max-w-md mx-auto shadow-2xl">
@@ -35,6 +39,7 @@ type AuthFormProps = {
                 />
               </>
             )}
+            
   
             <label className="label" htmlFor="email">
               <span className="label-text">Email</span>
@@ -61,6 +66,7 @@ type AuthFormProps = {
             />
   
             <button className="btn btn-neutral w-full mt-4 hover:text-black hover:bg-white">{buttonText}</button>
+            {errorMessage && <p className="text-red-400">{errorMessage}</p>}
           </form>
         </div>
       </div>

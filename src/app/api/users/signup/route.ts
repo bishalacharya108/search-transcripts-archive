@@ -16,11 +16,11 @@ export async function POST(req: NextRequest) {
 
     
     const user = await User.findOne({email});
-    // if (user ){
-    //     return NextResponse.json({
-    //         message: "User already exists"
-    //     }, {status: 400})
-    // }
+    if (user ){
+        return NextResponse.json({
+            message: "User already exists"
+        }, {status: 400})
+    }
 
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
  
 
-      const mailResponse = await sendEmail({email, emailType: "VERIFY", userId: (result as any)._id });
+      // const mailResponse = await sendEmail({email, emailType: "VERIFY", userId: (result as any)._id });
     
 
     return NextResponse.json(
