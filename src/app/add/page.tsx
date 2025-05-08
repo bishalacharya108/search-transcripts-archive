@@ -123,7 +123,7 @@ const TranscriptionPage: NextPage = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full btn py-2 px-4 btn-success text-white rounded-md shadow-md ${
+          className={`w-full btn py-2 px-4 btn-info text-white rounded-md shadow-md ${
             loading ? "opacity-50" : "hover:btn-accent"
           }`}
         >

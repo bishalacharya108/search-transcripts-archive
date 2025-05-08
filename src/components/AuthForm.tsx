@@ -65,7 +65,7 @@ type AuthFormProps = {
               required
             />
   
-            <button className="btn btn-neutral w-full mt-4 hover:text-black hover:bg-white">{buttonText}</button>
+            <button className="btn  btn-info text-white w-full mt-4 hover:bg-green-500 uppercase">{buttonText}</button>
             {errorMessage && <p className="text-red-400">{errorMessage}</p>}
           </form>
         </div>
