@@ -54,7 +54,7 @@
 - **zod**
 - **axios**
 - **tanstackquery**
-- **JWT**
+- **NextAuth**
 - **Shadcn** | **DaisyUI** (?)
 
 ---
