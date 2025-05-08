@@ -35,9 +35,6 @@ export async function POST(req: NextRequest) {
 
 
     //   send verification mail
-
- 
-
       // const mailResponse = await sendEmail({email, emailType: "VERIFY", userId: (result as any)._id });
     
 
