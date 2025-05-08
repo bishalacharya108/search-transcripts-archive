@@ -1,5 +1,9 @@
-import Link from 'next/link'
-export default function Navbar (){
+"use client";
+import { useAuth } from "@/app/hooks/useAuth";
+import Link from "next/link";
+import { LogoutButton } from "./LogoutBtn";
+export default function Navbar() {
+  const { isAuthenticated } = useAuth();
   const links = (
     <>
       <li>
@@ -8,12 +12,17 @@ export default function Navbar (){
       <li>
         <Link href={"/add"}>Add Transcripts</Link>
       </li>
-      <li>
-        <Link href={"/login"}>Login</Link>
-      </li>
-      <li>
-        <Link href={"/register"}>Register</Link>
-      </li>
+      {isAuthenticated === false && (
+        <>
+          <li>
+            <Link href="/login">Login</Link>
+          </li>
+          <li>
+            <Link href="/register">Register</Link>
+          </li>
+        </>
+      )}
+
       <li>
         <Link href={"/"}>Contribute</Link>
       </li>
@@ -52,11 +61,11 @@ export default function Navbar (){
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
-      </div>
+      {isAuthenticated === true && (
+        <div className="navbar-end">
+          <LogoutButton />
+        </div>
+      )}
     </div>
   );
-};
-
-
+}
