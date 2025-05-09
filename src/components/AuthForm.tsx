@@ -10,7 +10,7 @@ type AuthFormProps = {
   };
   
 
-//   using a shared component for both login and register
+//   using a shared component for both signin and register
   export default function AuthForm({
     title,
     buttonText,

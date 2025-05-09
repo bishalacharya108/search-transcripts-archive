@@ -1,9 +1,16 @@
 "use client";
-import { useAuth } from "@/app/hooks/useAuth";
+
+// import { useAuth } from "@/app/hooks/useAuth";
 import Link from "next/link";
 import { LogoutButton } from "./LogoutBtn";
+import { useSession } from "next-auth/react";
+import { Suspense } from "react";
+import Loading from "./Loading";
 export default function Navbar() {
-  const { isAuthenticated } = useAuth();
+  // console.log(session)
+  // const { isAuthenticated } = useAuth();
+  const { data: session, status } = useSession(); // Get session data and status
+  console.log(session);
   const links = (
     <>
       <li>
@@ -12,10 +19,11 @@ export default function Navbar() {
       <li>
         <Link href={"/add"}>Add Transcripts</Link>
       </li>
-      {isAuthenticated === false && (
+      {/* next auth based links */}
+      {status === "unauthenticated" && (
         <>
           <li>
-            <Link href="/login">Login</Link>
+            <Link href="/signin">Signin</Link>
           </li>
           <li>
             <Link href="/register">Register</Link>
@@ -61,11 +69,12 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
-      {isAuthenticated === true && (
+      <Suspense fallback = {<Loading />}>{status === "authenticated" && (
         <div className="navbar-end">
           <LogoutButton />
         </div>
-      )}
+      )}</Suspense>
+      
     </div>
   );
 }

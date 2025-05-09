@@ -8,8 +8,9 @@ export default function RegisterPage() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+
   // function to handle submit
-  const handleRegister = async (e: any) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const email = form.get("email");
@@ -26,7 +27,7 @@ export default function RegisterPage() {
       console.log("Signup successful:", response.data);
       setTimeout(() => {
         setShowToast(true);
-        router.push("/login");
+        router.push("/signin");
       }, 2000);
     } catch (error: any) {
       const message =
@@ -37,6 +38,8 @@ export default function RegisterPage() {
       setErrorMessage(message);
     }
   };
+
+  //
 
   return (
     <div className="hero bg-base-200 min-h-screen -mt-20">
