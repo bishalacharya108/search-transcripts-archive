@@ -26,7 +26,7 @@ export const sendEmail = async ({
     const verificationLink = `${baseUrl}/verify`;
     const resetPassLink = `${baseUrl}/resetpassword`;
     const generatedId = uuidv4();
-    console.log("Generated id: ", generatedId);
+    // console.log("Generated id: ", generatedId);
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate(userId, {
         verifyToken: generatedId,

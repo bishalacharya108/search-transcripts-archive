@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 import connectDB from "@/config/db";
 import bcryptjs from "bcryptjs"
 
-import { sendEmail } from '@/helpers/mailer';
+// import { sendEmail } from '@/helpers/mailer';
 import { UserServices } from '@/modules/users/user.service';
 connectDB();
 export async function POST(req: NextRequest) {

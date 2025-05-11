@@ -27,11 +27,11 @@ export const LogoutButton = () => {
          if (error instanceof Error) {
         // Check if the error is an instance of the built-in Error class
         setErrorMessage(error.message || "An unexpected error occurred during logout");
-        console.log("From logout", error.message || "An unexpected error occurred during logout");
+        // console.log("From logout", error.message || "An unexpected error occurred during logout");
       } else {
         // Handle cases where error isn't an instance of Error
         setErrorMessage("An unexpected error occurred during logout");
-        console.log("From logout (unknown error type)", errorMessage);
+        // console.log("From logout (unknown error type)", errorMessage);
       }
 
       // Clear the error message after 5 seconds

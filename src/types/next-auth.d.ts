@@ -1,5 +1,6 @@
 import "next-auth";
 import { DefaultSession } from "next-auth";
+import { DefaultJWT } from "next-auth/jwt";
 
 // creating this for the user in auth options (callback) in nextauth
 declare module "next-auth" {
@@ -14,13 +15,13 @@ declare module "next-auth" {
       _id?: string;
       isVerified?: boolean;
       userName?: string;
-      role: string;
+      role?: string;
     } & DefaultSession["user"];
   }
 }
 
 declare module "next-auth/jwt" {
-  interface JWT {
+  interface JWT extends DefaultJWT {
     _id?: string;
     isVerified?: boolean;
     userName?: string;

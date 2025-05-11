@@ -24,7 +24,7 @@ export default function RegisterPage() {
         password,
       });
 
-      console.log("Signup successful:", response.data);
+      // console.log("Signup successful:", response.data);
       setTimeout(() => {
         setShowToast(true);
         router.push("/signin");
