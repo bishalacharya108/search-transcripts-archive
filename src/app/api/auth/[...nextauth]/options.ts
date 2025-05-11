@@ -81,7 +81,7 @@ export const authOptions: NextAuthOptions = {
 
     // session will recieve the user from authorize method and then this user will be available in jwt via session
     async session({ session, token }) {
-      if (token) {
+      if (session?.user) {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
         session.user.userName = token.userName;
@@ -107,5 +107,5 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt", // we can use db or jwt, using jwt for now
   },
-  secret: process.env.NEXT_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 };

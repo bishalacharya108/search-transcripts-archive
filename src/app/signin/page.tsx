@@ -1,16 +1,33 @@
 "use client";
 import AuthForm from "@/components/AuthForm";
-
+import { auth } from "@/auth";
 import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
-import { signIn } from "next-auth/react";
+import { Suspense, useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import Loading from "@/components/Loading";
 
 
 export default function SigninPage() {
+  // const session = await getServerSession(authOptions);
+  // const { data: session, status } = useSession();
+  // const session = await auth();
+
   const router = useRouter();
+  // const [loading, setLoading] = useState(false);
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.push("/");
+
+  //   } 
+  // }, [status]);
+
+  // if (status === "loading") {
+  //   return <Loading />;
+  // }
+
   const [errorMessage, setErrorMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+
   const handleSignin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
@@ -36,7 +53,7 @@ export default function SigninPage() {
         setTimeout(() => router.push("/"), 1000);
       }
     } catch (error: any) {
-        const message =
+      const message =
         error?.response?.data?.message ||
         error?.message ||
         "An unexpected error occurred during signup.";

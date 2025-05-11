@@ -11,7 +11,7 @@ import { getServerSession } from 'next-auth';
 export async function POST(req: NextRequest) {
   
    const session = await getServerSession(authOptions);
-
+  // console.log("Session in POST:", session);
   //  we should probably check the role of the user here, because admins and verified users can upload only
   if (!session) {
     return NextResponse.json(

@@ -7,6 +7,7 @@ import "./globals.css";
 import ClientNavbarWrapper from "@/components/ClientNavbarWrapper";
 import ClientLayout from "./ClientLayout";
 import Navbar from "@/components/Navbar";
+import NavbarServer from "@/components/NavbarServer";
 
 
 
@@ -30,10 +31,11 @@ export default function RootLayout({
         {/* <Navbar></Navbar>
          */}
          {/* <ClientNavbarWrapper></ClientNavbarWrapper> */}
-         <ClientLayout>
-          <Navbar></Navbar>
+         {/* <ClientLayout> */}
+          {/* <Navbar></Navbar> */}
+          <NavbarServer></NavbarServer>
         {children}
-        </ClientLayout>
+        {/* </ClientLayout> */}
          {/* </SessionProvider> */}
       </body>
      

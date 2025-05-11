@@ -1,7 +1,9 @@
 import connectDB from "@/config/db";
 import { TranscriptServices } from "@/modules/transcription/transcriptions.services";
+import { getServerSession } from "next-auth";
 
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 
 export async function GET(
@@ -41,6 +43,18 @@ export async function PATCH(
     req: NextRequest,
     { params }: { params: { id: string } }
   ) {
+    const session = await getServerSession(authOptions);
+      console.log("Session in POST:", session);
+      //  we should probably check the role of the user here, because admins and verified users can upload only
+      if (!session) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Unauthorized. Please sign in.",
+          },
+          { status: 401 }
+        );
+      }
     await connectDB();
     try {
       const body = await req.json();
@@ -72,6 +86,18 @@ export async function PATCH(
     req: NextRequest,
     { params }: { params: { id: string } }
   ) {
+     const session = await getServerSession(authOptions);
+      console.log("Session in POST:", session);
+      //  we should probably check the role of the user here, because admins and verified users can upload only
+      if (!session) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Unauthorized. Please sign in.",
+          },
+          { status: 401 }
+        );
+      }
     await connectDB();
     try {
       const deleted = await TranscriptServices.deleteTranscriptionFromDB(params.id);

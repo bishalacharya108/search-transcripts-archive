@@ -6,11 +6,14 @@ import { LogoutButton } from "./LogoutBtn";
 import { useSession } from "next-auth/react";
 import { Suspense } from "react";
 import Loading from "./Loading";
-export default function Navbar() {
-  // console.log(session)
-  // const { isAuthenticated } = useAuth();
-  const { data: session, status } = useSession(); // Get session data and status
-  console.log(session);
+import { get } from "http";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+export default function Navbar({session}: {session: any}) {
+
+  // const { data: session, status } = useSession(); // Get session data and status
+  // console.log(session);
+  // const session = await getServerSession(authOptions)
   const links = (
     <>
       <li>
@@ -20,7 +23,9 @@ export default function Navbar() {
         <Link href={"/add"}>Add Transcripts</Link>
       </li>
       {/* next auth based links */}
-      {status === "unauthenticated" && (
+      {
+      // status === "unauthenticated" && (
+      !session && (
         <>
           <li>
             <Link href="/signin">Signin</Link>
@@ -32,7 +37,7 @@ export default function Navbar() {
       )}
 
       <li>
-        <Link href={"/"}>Contribute</Link>
+        <Link href={"/about"}>Contribute</Link>
       </li>
     </>
   );
@@ -69,11 +74,13 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
-      <Suspense fallback = {<Loading />}>{status === "authenticated" && (
+      {
+      // status === "authenticated" && (
+      session && (
         <div className="navbar-end">
           <LogoutButton />
         </div>
-      )}</Suspense>
+      )}
       
     </div>
   );
