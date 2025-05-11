@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     // for now I don't need it
-    // if any page is needed to be override we will override here
+    // if any page is needed to be overrided we will override here
   },
 
   

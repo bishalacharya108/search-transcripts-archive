@@ -8,22 +8,8 @@ import Loading from "@/components/Loading";
 
 
 export default function SigninPage() {
-  // const session = await getServerSession(authOptions);
-  // const { data: session, status } = useSession();
-  // const session = await auth();
-
+  
   const router = useRouter();
-  // const [loading, setLoading] = useState(false);
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     router.push("/");
-
-  //   } 
-  // }, [status]);
-
-  // if (status === "loading") {
-  //   return <Loading />;
-  // }
 
   const [errorMessage, setErrorMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -36,7 +22,7 @@ export default function SigninPage() {
     const password = form.get("password");
     setErrorMessage("");
 
-    // next auth
+    // using next auth signin function
     try {
       const res = await signIn("credentials", {
         redirect: false,

@@ -1,15 +1,8 @@
-// "use client";
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
-// import Navbar from "@/components/Navbar";
-// import { SessionProvider } from "next-auth/react";
-import ClientNavbarWrapper from "@/components/ClientNavbarWrapper";
-import ClientLayout from "./ClientLayout";
-import Navbar from "@/components/Navbar";
+
 import NavbarServer from "@/components/NavbarServer";
-
-
 
 export const metadata: Metadata = {
   title: "Search-Transcripts-Archive",
@@ -23,22 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* wrapping with session provider to access session info throughout the app */}
-      
-      <body
-      >
-        {/* <SessionProvider> */}
-        {/* <Navbar></Navbar>
-         */}
-         {/* <ClientNavbarWrapper></ClientNavbarWrapper> */}
-         {/* <ClientLayout> */}
-          {/* <Navbar></Navbar> */}
-          <NavbarServer></NavbarServer>
+      <body>
+        {/* <Navbar></Navbar> */}
+        <NavbarServer></NavbarServer>
         {children}
-        {/* </ClientLayout> */}
-         {/* </SessionProvider> */}
       </body>
-     
     </html>
   );
 }

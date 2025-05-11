@@ -1,12 +1,11 @@
 "use client";
 
-// import { useAuth } from "@/app/hooks/useAuth";
 import Link from "next/link";
 import { LogoutButton } from "./LogoutBtn";
 import { useSession } from "next-auth/react";
 import { Suspense } from "react";
 import Loading from "./Loading";
-import { get } from "http";
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 export default function Navbar({session}: {session: any}) {
@@ -37,7 +36,7 @@ export default function Navbar({session}: {session: any}) {
       )}
 
       <li>
-        <Link href={"/about"}>Contribute</Link>
+        <Link href={"/about"}>About</Link>
       </li>
     </>
   );

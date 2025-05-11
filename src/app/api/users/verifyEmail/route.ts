@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import connectDB from "@/config/db";
 
-import { UserServices } from "@/modules/users/user.service";
+// import { UserServices } from "@/modules/users/user.service";
 connectDB();
 
 export async function POST(req: NextRequest) {

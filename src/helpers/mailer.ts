@@ -1,6 +1,6 @@
 import { User } from "./../modules/users/user.model";
 import { v4 as uuidv4 } from "uuid";
-// will use nodemailer here
+// not used in verfication yet
 
 import nodemailer from "nodemailer";
 
@@ -26,7 +26,7 @@ export const sendEmail = async ({
     const verificationLink = `${baseUrl}/verify`;
     const resetPassLink = `${baseUrl}/resetpassword`;
     const generatedId = uuidv4();
-    // console.log("Generated id: ", generatedId);
+    
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate(userId, {
         verifyToken: generatedId,
@@ -57,11 +57,11 @@ export const sendEmail = async ({
       to: email,
       subject:
         emailType === "VERIFY" ? "Verify Your Email" : "Reset your password",
-      text: "Hello world?", // plain‑text body
+      text: "Hello world?", 
 
       html: `<p>Please <a href="${actionUrl}">${
         emailType === "VERIFY" ? "verify your email" : "reset your password"
-      }</a> within 1 hour.</p>`, // HTML body
+      }</a> within 1 hour.</p>`, 
     };
     const mailResponse = await transporter.sendMail(mailOptions);
     if (process.env.NODE_ENV === "development") {

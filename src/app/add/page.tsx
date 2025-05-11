@@ -60,7 +60,7 @@ const TranscriptionPage: NextPage = () => {
   };
 
   return (
-    <div className="mx-auto p-4 shadow-md rounded-lg mb-4 mx-5">
+    <div className="p-4 shadow-md rounded-lg mb-4 mx-5">
       <h1 className="text-2xl font-bold mb-4">Submit your Transcription</h1>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
