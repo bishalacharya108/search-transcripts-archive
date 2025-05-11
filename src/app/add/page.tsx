@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { NextPage } from "next";
 import axios from "axios";
+import Link from "next/link";
 
 const TranscriptionPage: NextPage = () => {
   const [title, setTitle] = useState<string>("");
@@ -34,7 +35,6 @@ const TranscriptionPage: NextPage = () => {
     setError("");
 
     try {
-
       // using axios here
       await axios.post("/api/transcription", {
         title,
@@ -50,7 +50,9 @@ const TranscriptionPage: NextPage = () => {
       alert("Transcription created successfully for review!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError(error.response?.data?.message || "Failed to create transcription.");
+        setError(
+          error.response?.data?.message || "Failed to create transcription."
+        );
       } else {
         setError("An unknown error occurred.");
       }
@@ -77,6 +79,7 @@ const TranscriptionPage: NextPage = () => {
           <input
             type="text"
             id="title"
+            required
             value={title}
             onChange={handleTitleChange}
             className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -96,6 +99,7 @@ const TranscriptionPage: NextPage = () => {
             type="text"
             id="videoUrl"
             value={videoUrl}
+            required
             onChange={handleVideoUrlChange}
             className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="Enter the youtube video url"
@@ -115,20 +119,33 @@ const TranscriptionPage: NextPage = () => {
             value={markdown}
             onChange={handleMarkdownChange}
             rows={10}
-            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 h-55"
+            required
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40"
             placeholder="Enter transcription content in Markdown format"
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full btn py-2 px-4 btn-info text-white rounded-md shadow-md ${
-            loading ? "opacity-50" : "hover:btn-accent"
-          }`}
-        >
-          {loading ? "Submitting..." : "Submit Transcription"}
-        </button>
+        <div className="flex">
+          <Link href={"/"} className="btn btn-ghost">
+            <button
+              type="submit"
+              className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-warning
+          `}
+            >
+              Cancel
+            </button>
+          </Link>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-40 btn py-2 px-4 btn-info ml-5 text-white rounded-md shadow-md ${
+              loading ? "opacity-50" : "hover:btn-accent"
+            }`}
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </button>
+        </div>
       </form>
     </div>
   );

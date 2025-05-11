@@ -38,6 +38,7 @@ export default function Navbar({session}: {session: any}) {
       <li>
         <Link href={"/about"}>About</Link>
       </li>
+      <li><Link href="/admin">Admin Panel</Link></li>
     </>
   );
   return (
@@ -68,7 +69,7 @@ export default function Navbar({session}: {session: any}) {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">ISDS</a>
+        <Link href={"/"} className="btn btn-ghost text-xl">ISDS</Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
