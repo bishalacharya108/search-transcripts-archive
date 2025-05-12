@@ -23,10 +23,10 @@ const TranscriptSchema = new Schema<TTranscript>({
       message: "Invalid YouTube URL"
     }
   },
-  tags: {
-    type: [String],
-    default: [],
-  },
+  // tags: {
+  //   type: [String],
+  //   default: [],
+  // },
   status: {
     type: String,
     enum: ["pending", "approved"],
@@ -36,8 +36,11 @@ const TranscriptSchema = new Schema<TTranscript>({
   uploadedAt: {
     type: Date,
     default: Date.now,
-  }
-});
+  },
+  lastUpdatedAt: {
+    type: Date,
+  },
+}, {timestamps: true});
 
 // Infer document type
 export type TranscriptDocument = HydratedDocument<TTranscript>;

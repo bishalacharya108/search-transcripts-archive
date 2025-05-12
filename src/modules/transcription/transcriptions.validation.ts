@@ -21,8 +21,11 @@ export const TranscriptValidationSchema = z.object({
     .default("pending"),
 
   uploadedAt: z.date()
+    .default(new Date()),
+    
+  lastUpdatedAt: z.date()
     .optional()
-    .default(new Date())
+
 });
 
 // type inference

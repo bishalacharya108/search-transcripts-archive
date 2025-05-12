@@ -1,5 +1,3 @@
-
-
 import mongoose, { Types } from "mongoose";
 import { TTranscript } from "./transcriptions.interface";
 import { Transcript } from "./transcriptions.model";
@@ -30,10 +28,11 @@ const updateTranscriptionInDB = async (
         id: string | Types.ObjectId,
         updateData: Partial<typeof Transcript.prototype>
       ) => {
+        
         const updatedTranscript = await Transcript.findByIdAndUpdate(
           new mongoose.Types.ObjectId(id),
           updateData,
-          { new: true, runValidators: true }
+          { new: true, upsert: true, runValidators: true }
         );
       
         return updatedTranscript; 

@@ -4,12 +4,15 @@ import { getServerSession } from "next-auth";
 
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
+import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  
+    
     await connectDB();
     try{
         // getting the transcript through services... here I realised I can directly call the service methods instead of controllers
@@ -59,7 +62,7 @@ export async function PATCH(
     try {
       const body = await req.json();
   
-      const updated = await TranscriptServices.updateTranscriptionInDB(params.id, body);
+      const updated = await TranscriptControllers.updateATranscript(params?.id, body);
   
       if (!updated) {
         return NextResponse.json(
