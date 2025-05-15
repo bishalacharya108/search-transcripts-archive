@@ -1,9 +1,12 @@
-import { TTranscript } from "@/modules/transcription/transcriptions.interface";
-import { describe } from "node:test";
+// import { TTranscript } from "@/modules/transcription/transcriptions.interface";
+// import { describe } from "node:test";
+import Link from "next/link";
 import React from "react";
 
 const DashboardCard = ({transcript}) => {
-    const {title, markdown} = transcript;
+    const {title, markdown, _id} = transcript;
+  // console.log("From Dashboard card",_id);
+
   return (
     <div>
       <div className="card w-[50rem] bg-base-100 card-md shadow-sm mx-auto">
@@ -13,7 +16,7 @@ const DashboardCard = ({transcript}) => {
             {markdown.length > 500 ? `${markdown.slice(0, 500)}...` : markdown} 
           </p>
           <div className="justify-end card-actions">
-            <button className="btn btn-primary">Expand</button>
+           <Link href={`/dashboard/${_id}`}><button className="btn btn-primary">Expand</button></Link> 
           </div>
         </div>
       </div>

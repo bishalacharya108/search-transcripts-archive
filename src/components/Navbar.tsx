@@ -8,8 +8,7 @@ import Loading from "./Loading";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-export default function Navbar({session}: {session: any}) {
-
+export default function Navbar({ session }: { session: any }) {
   // const { data: session, status } = useSession(); // Get session data and status
   // console.log(session);
   // const session = await getServerSession(authOptions)
@@ -22,23 +21,28 @@ export default function Navbar({session}: {session: any}) {
         <Link href={"/add"}>Add Transcripts</Link>
       </li>
       {/* next auth based links */}
-      {
-      // status === "unauthenticated" && (
-      !session && (
-        <>
-          <li>
-            <Link href="/signin">Signin</Link>
-          </li>
-          <li>
-            <Link href="/register">Register</Link>
-          </li>
-        </>
-      )}
+      <Suspense fallback={<Loading />}>
+        {
+          // status === "unauthenticated" && (
+          !session && (
+            <>
+              <li>
+                <Link href="/signin">Signin</Link>
+              </li>
+              <li>
+                <Link href="/register">Register</Link>
+              </li>
+            </>
+          )
+        }
+      </Suspense>
 
       <li>
         <Link href={"/about"}>About</Link>
       </li>
-      <li><Link href="/admin">Admin Panel</Link></li>
+      <li>
+        <Link href="/admin">Admin Panel</Link>
+      </li>
     </>
   );
   return (
@@ -69,19 +73,23 @@ export default function Navbar({session}: {session: any}) {
             {links}
           </ul>
         </div>
-        <Link href={"/"} className="btn btn-ghost text-xl">ISDS</Link>
+        <Link href={"/"} className="btn btn-ghost text-xl">
+          ISDS
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
-      {
-      // status === "authenticated" && (
-      session && (
-        <div className="navbar-end">
-          <LogoutButton />
-        </div>
-      )}
-      
+      <Suspense fallback={<Loading />}>
+        {
+          // status === "authenticated" && (
+          session && (
+            <div className="navbar-end">
+              <LogoutButton />
+            </div>
+          )
+        }
+      </Suspense>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Loading from "@/components/Loading";
+// import { revalidatePath } from "next/cache";
 
 
 export default function SigninPage() {
@@ -36,7 +37,10 @@ export default function SigninPage() {
         setErrorMessage(res.error);
       } else {
         setShowToast(true);
-        setTimeout(() => router.push("/"), 1000);
+        // revalidatePath("/");
+        setTimeout(() => 
+           // Revalidate the path to ensure the session is up to date
+          router.push("/"), 1000);
       }
     } catch (error: any) {
       const message =
