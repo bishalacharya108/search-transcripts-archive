@@ -1,5 +1,7 @@
 import DashboardCard from "@/components/DashboardCard";
 import { TTranscript } from "@/modules/transcription/transcriptions.interface";
+import getYouTubeEmbedUrl from "@/utils/ytConverter";
+import Link from "next/link";
 
 import { remark } from 'remark';
 import html from 'remark-html';
@@ -15,6 +17,8 @@ export default async function Expand({ params }) {
         .use(html)
         .process(markdownText);
     const markdownHtml = processedContent.toString();
+    // 
+    const convertedUrl = getYouTubeEmbedUrl(transcript.videoUrl);
     return (
         <div>
             {
@@ -22,18 +26,32 @@ export default async function Expand({ params }) {
                     <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-8">
 
                         <h1 className="text-3xl font-semibold mb-2">{transcript?.title}</h1>
-
                         {transcript?.uploadedAt && <p className="text-sm text-gray-500 mb-6">
                             Upload Date: {readableDate}
                         </p>}
-                        <div className="ml-3">
-                            <button className="btn btn-soft ml-3">
-                                All Transcripts
-                            </button>
+                        <div className="mb-3">
+                            <Link href={"/admin"}>
+
+                                <button className="btn btn-soft">
+                                    All Transcripts
+                                </button>
+                            </Link>
 
                             <button className="btn btn-secondary ml-3">
                                 Edit
                             </button>
+                        </div>
+                        <div>
+                            <iframe
+                                width="853"
+                                height="480"
+                                src={convertedUrl}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title="Embedded youtube"
+                            />
+
                         </div>
                         <div>
                             {markdownHtml

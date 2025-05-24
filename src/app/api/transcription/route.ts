@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/config/db";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -29,6 +30,8 @@ export async function POST(req: NextRequest) {
     // getting data using controllers. still undecided on the functionalities controllers in this case
     // probably will delete controllers later and directly call from services
     const result = await TranscriptControllers.createTranscript(validatedData);
+    revalidatePath("/dashboard");
+    revalidatePath("/admin");
 
     return NextResponse.json(
       {

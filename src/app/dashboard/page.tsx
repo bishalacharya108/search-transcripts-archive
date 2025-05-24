@@ -6,11 +6,13 @@ export default async function Page() {
     // we would only want to fetch the transcripts that were verified by the admin
     const response = await fetch("http://localhost:3000/api/transcription", {next: { revalidate: 60 }});
   const {data: transcripts}: {data:TTranscript[]} = await response.json();
-  
+  const sortedTranscripts = [...transcripts].sort(
+    (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+  );  
   return (
     <div>
         {
-            transcripts.map((transcript) =>
+            sortedTranscripts.map((transcript) =>
             <DashboardCard key={transcript._id} transcript = {transcript}>
             
             </DashboardCard>)

@@ -12,11 +12,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   
-    
+    const {id} = await params;     
     await connectDB();
     try{
         // getting the transcript through services... here I realised I can directly call the service methods instead of controllers
-        const data = await TranscriptServices.getATranscriptionFromDB(params?.id);
+        const data = await TranscriptServices.getATranscriptionFromDB(id);
 
         if(!data){
             return NextResponse.json({
@@ -32,7 +32,7 @@ export async function GET(
         },{status: 200})
 
     }catch(error){
-        console.error(`[GET /api/transcription/${params.id}]`, error);
+        console.error(`[GET /api/transcription/${id}]`, error);
         return NextResponse.json({
             success: false,
             message: "Error getting transcript",
@@ -46,6 +46,7 @@ export async function PATCH(
     req: NextRequest,
     { params }: { params: { id: string } }
   ) {
+      const {id} = await params;
     const session = await getServerSession(authOptions);
       console.log("Session in POST:", session);
       //  we should probably check the role of the user here, because admins and verified users can upload only
@@ -62,7 +63,7 @@ export async function PATCH(
     try {
       const body = await req.json();
   
-      const updated = await TranscriptControllers.updateATranscript(params?.id, body);
+      const updated = await TranscriptControllers.updateATranscript(id, body);
   
       if (!updated) {
         return NextResponse.json(
@@ -76,7 +77,7 @@ export async function PATCH(
         { status: 200 }
       );
     } catch (error) {
-      console.error(`[PATCH /api/transcription/${params.id}]`, error);
+      console.error(`[PATCH /api/transcription/${id}]`, error);
       return NextResponse.json(
         { success: false, message: "Error updating transcript", error },
         { status: 500 }
