@@ -6,12 +6,10 @@ import { useSession } from "next-auth/react";
 import { Suspense } from "react";
 import Loading from "./Loading";
 
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 export default function Navbar({ session }: { session: any }) {
   // const { data: session, status } = useSession(); // Get session data and status
   // console.log(session);
-  // const session = await getServerSession(authOptions)
   const links = (
     <>
       <li>

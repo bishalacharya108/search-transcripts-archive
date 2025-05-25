@@ -6,7 +6,7 @@ export default withAuth(
   async function middleware(req) {
     const token = await getToken({ req });
     const { pathname } = req.nextUrl;
-    console.log("Middleware: ", token);
+    // console.log("Middleware: ", token);
     console.log("Middleware pathname hit: ", pathname);
     // Redirect logged-in users away from auth pages
     if (token && (pathname === "/signin" || pathname === "/register")) {
@@ -26,7 +26,7 @@ export default withAuth(
         if (pathname === "/signin"  || pathname === "/register") {
           return true;
         }
-
+        console.log("from middleware authorize section ",token?.role);
         // Restrict /add to authenticated users only
         if (pathname.startsWith("/add")) {
           return !!token;

@@ -4,12 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 import connectDB from "@/config/db";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { getToken } from "next-auth/jwt";
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  // console.log("Session in POST:", session);
   //  we should probably check the role of the user here, because admins and verified users can upload only
   // if (!session) {
   //   return NextResponse.json(
@@ -39,7 +37,7 @@ export async function POST(req: NextRequest) {
         message: "Trancsript Added Successfully",
         data: result,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(
@@ -48,26 +46,28 @@ export async function POST(req: NextRequest) {
         message: "Failed to Post Transcript",
         error: error,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
 
-
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req, secret });
+  console.log("this is the token:",token)
   await connectDB();
 
   try {
     const result = await TranscriptControllers.getAllTranscripts();
-
     return NextResponse.json(
       {
         success: true,
         message: "Trancsripts Fetched Successfully",
+        token,
         data: result,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(
@@ -76,7 +76,7 @@ export async function GET() {
         message: "Failed to Fetch Transcripts",
         error: error,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

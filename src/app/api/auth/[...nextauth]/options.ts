@@ -20,17 +20,13 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials: any, req: any): Promise<any> {
         await connectDB();
         try {
-          console.log(credentials.email, credentials.password);
-          // 🔧 VALIDATION: check if both fields exist
+          // VALIDATION: check if both fields exist
           if (!credentials?.email || !credentials?.password) {
             throw new Error("Missing email/username or password");
           }
 
           const user = await User.findOne({
-            $or: [
-              { email: credentials.email },
-              
-            ],
+            $or: [{ email: credentials.email }],
           });
 
           if (!user) {
@@ -44,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
           const isPasswordCorrect = await bcryptjs.compare(
             credentials.password,
-            user.password
+            user.password,
           );
 
           if (!isPasswordCorrect) {
@@ -71,9 +67,7 @@ export const authOptions: NextAuthOptions = {
     // if any page is needed to be overrided we will override here
   },
 
-  
   callbacks: {
-
     // why am I using both session and jwt
     // session is used for server side rendering
     // jwt is used for client side rendering
@@ -85,7 +79,7 @@ export const authOptions: NextAuthOptions = {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
         session.user.userName = token.userName;
-        session.user.role = token.role
+        session.user.role = token.role;
       }
       return session;
     },
@@ -95,7 +89,7 @@ export const authOptions: NextAuthOptions = {
         token._id = user._id?.toString();
         token.isVerified = user.isVerified;
         token.userName = user.userName;
-        token.role = user.role
+        token.role = user.role;
       }
       return token;
     },
@@ -106,6 +100,8 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt", // we can use db or jwt, using jwt for now
+    maxAge: 24 * 60 * 60,
+    updateAge: 4 * 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
