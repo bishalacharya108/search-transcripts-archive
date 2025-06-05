@@ -34,8 +34,6 @@ export default async function Expand({ params }) {
                                     All Transcripts
                                 </button>
                             </Link>
-
-                        
                         </div>
                         {transcript?.uploadedAt && <p className="text-sm text-gray-500 mb-6">
                             Upload Date: {readableDate}

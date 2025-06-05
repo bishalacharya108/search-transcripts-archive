@@ -52,10 +52,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
-  console.log("this is the token:",token)
+  // if (token?.role === "admin") console.log("yes, this is admin", token);
+  // else console.log("this is not admin");
   await connectDB();
 
   try {
