@@ -9,7 +9,7 @@ export default async function AdminPanel() {
         return null;
     }
     // we would only want to fetch the transcripts that were verified by the admin
-    const response = await fetch("http://localhost:3000/api/transcription", { next: { revalidate: 60 }, credentials: "include" });
+    const response = await fetch("http://localhost:3001/api/transcription", { next: { revalidate: 60 }, credentials: "include" });
 
     const { data: transcripts }: { data: TTranscript[] } = await response.json();
 

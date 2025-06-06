@@ -5,7 +5,6 @@ import React from "react";
 
 const DashboardCard = ({transcript}) => {
     const {title, markdown, _id} = transcript;
-  // console.log("From Dashboard card",_id);
 
   return (
     <div>

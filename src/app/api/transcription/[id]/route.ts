@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET(
   req: NextRequest,
@@ -55,19 +56,9 @@ export async function PATCH(
 ) {
   const { id } = await params;
   //  we should probably check the role of the user here, because admins and verified users can upload only
-  if (!session) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized. Please sign in.",
-      },
-      { status: 401 },
-    );
-  }
   await connectDB();
   try {
     const body = await req.json();
-
     const updated = await TranscriptControllers.updateATranscript(id, body);
 
     if (!updated) {
@@ -77,6 +68,11 @@ export async function PATCH(
       );
     }
 
+    revalidatePath("/dashboard");
+    revalidatePath("/");
+    revalidatePath("/admin");
+    revalidateTag("transcription")
+    revalidateTag("dashboard")
     return NextResponse.json(
       {
         success: true,
@@ -102,7 +98,6 @@ export async function DELETE(
      
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
-  console.log("from test log:", token);
   const session = await getServerSession(authOptions);
   //  we should probably check the role of the user here, because admins and verified users can upload only
   if (token?.role != "admin") {
@@ -114,7 +109,6 @@ export async function DELETE(
       { status: 401 },
     );
   }
-  // console.log("Session in POST:", session.user.role);
   console.log("Session in delete", session)
   await connectDB();
   try {

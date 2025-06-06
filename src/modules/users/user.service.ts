@@ -10,7 +10,6 @@ const createNewUser = async(user: Partial<TUser>): Promise<TUser> =>{
 
     const result = await newUser.save();
     return result;
-    // console.log(result);
 }
 
 

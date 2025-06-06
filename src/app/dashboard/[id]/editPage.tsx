@@ -1,71 +1,124 @@
-"use client"
-import DashboardLayout from "@/app/admin/layout"
-import { TTranscript } from "@/modules/transcription/transcriptions.interface"
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { remark } from "remark";
+import html from "remark-html";
+import { TTranscript } from "@/modules/transcription/transcriptions.interface";
 
 type TEditParam = {
-    transcript: TTranscript;
-    markdownHtml: string;
-    convertedUrl: string
-}
-export default function EditPage({ transcript, markdownHtml, convertedUrl }: TEditParam) {
-    const { title } = transcript;
-    const [isEditing, setIsEditing] = useState(false)
-    const handleSave = e => {
+  transcript: TTranscript;
+  markdownHtml: string;
+  convertedUrl: string;
+};
 
+export default function EditPage({
+  transcript: initialTranscript,
+  markdownHtml: initialHtml,
+  convertedUrl: initialUrl,
+}: TEditParam) {
+  const router = useRouter();
+  const [_id] = [initialTranscript._id];
+
+  const [loading, setLoading] = useState(true);
+
+  const [transcript, setTranscript] = useState<TTranscript | null>(initialTranscript);
+  const [videoUrl, setVideoUrl] = useState<string>(initialUrl || "");
+  const [markdown, setMarkdown] = useState<string>(initialTranscript.markdown || "");
+  const [markdownHtml, setMarkdownHtml] = useState<string>(initialHtml || "");
+  const [updatedTitle, setUpdatedTitle] = useState<string>(initialTranscript.title || "");
+  const [isEditing, setIsEditing] = useState(false);
+
+
+  // reconvert markdown when it changes
+  useEffect(() => {
+    const convertMarkdown = async () => {
+      const processed = await remark().use(html).process(markdown);
+      setMarkdownHtml(processed.toString());
+    };
+
+    if (markdown) convertMarkdown();
+  }, [markdown]);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!confirm("Do you want to update?")) return;
+
+    try {
+      const response = await axios.patch(`/api/transcription/${_id}`, {
+        title: updatedTitle,
+        markdown,
+        videoUrl,
+      });
+
+      if (response.status === 200) {
+        alert("Transcription updated!");
+        setIsEditing(false);
+        router.refresh(); // Trigger SSR update if needed
+      }
+    } catch (error) {
+      console.error("Error updating:", error);
     }
-    return (
+  };
+
+  // if (loading || !transcript) {
+  //   return <div className="p-4 text-center">Loading...</div>;
+  // }
+
+  return (
+    <div className="p-4">
+      <button
+        className="btn btn-secondary my-1"
+        onClick={() => setIsEditing(!isEditing)}
+      >
+        {isEditing ? "Reading mode" : "Edit mode"}
+      </button>
+
+      {isEditing ? (
+        <form onSubmit={handleSave}>
+          <input
+            value={updatedTitle}
+            onChange={(e) => setUpdatedTitle(e.target.value)}
+            className="w-full p-2 mt-1"
+          />
+          <input
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            className="w-full p-2 mt-1"
+          />
+          <textarea
+            value={markdown}
+            onChange={(e) => setMarkdown(e.target.value)}
+            className="w-full h-96 p-2 mt-1"
+          />
+          <button type="submit" className="btn btn-accent">Update</button>
+          <button type="button" onClick={() => setIsEditing(false)} className="btn btn-error ml-1">Cancel</button>
+        </form>
+      ) : (
         <div>
-
-
-            <button className="btn btn-secondary my-1" onClick={() => setIsEditing(!isEditing)}>
-                {
-                    !isEditing ? "Reading mode"
-                        : "Edit mode"
-                }
-            </button>
-            {/*conditional edit button toggle*/}
-            {
-                !isEditing ?
-                    <form>
-                        <input value={title} name = {"title"} className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm " />
-                        <input value={convertedUrl} name="url" className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm"  />
-                        <textarea value={markdownHtml} name="markdown" className="w-full h-96 p-2 mt-1 border border-gray-300 rounded-md shadow-sm"></textarea>
-                        <button type="submit" className="btn btn-accent">Submit</button>
-                    </form>
-                    :
-
-                    <div>
-                        <h1 className="text-3xl font-semibold mb-2">{title}</h1>
-                        <div>
-                            <iframe
-                                width="853"
-                                height="480"
-                                src={convertedUrl}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title="Embedded youtube"
-                            />
-
-                        </div>
-                        <div>
-                            {markdownHtml
-                                && <div className="overflow-x-auto">
-                                    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-md">
-                                        <article
-                                            className="prose prose-lg dark:prose-invert break-words whitespace-pre-wrap"
-                                            dangerouslySetInnerHTML={{ __html: markdownHtml }}
-                                        />
-                                    </div>
-                                </div>
-
-                            }
-                        </div>
-                    </div>
-            }
+          <h1 className="text-3xl font-semibold mb-2">{updatedTitle}</h1>
+          {videoUrl && (
+            <div className="mb-4">
+              <iframe
+                width="853"
+                height="480"
+                src={videoUrl}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Embedded video"
+              />
+            </div>
+          )}
+          <div className="overflow-x-auto">
+            <article
+              className="prose prose-lg dark:prose-invert break-words whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: markdownHtml }}
+            />
+          </div>
         </div>
-
-    )
+      )}
+    </div>
+  );
 }
 
