@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { remark } from "remark";
 import html from "remark-html";
 import { TTranscript } from "@/modules/transcription/transcriptions.interface";
+import { Transcript } from "@/modules/transcription/transcriptions.model";
+import { Dropdown } from "./Dropdown";
 
 type TEditParam = {
     transcript: TTranscript;
@@ -29,6 +31,9 @@ export default function EditPage({
     const [updatedTitle, setUpdatedTitle] = useState<string>(initialTranscript.title || "");
     const [isEditing, setIsEditing] = useState(false);
 
+    // for status changes
+    const [status, setStatus] = useState<string>(initialTranscript.status || "")
+    const [isOpen, setIsOpen] = useState<boolean>(false)
 
     // reconvert markdown when it changes
     useEffect(() => {
@@ -49,18 +54,25 @@ export default function EditPage({
                 title: updatedTitle,
                 markdown,
                 videoUrl,
+                status
             });
 
             if (response.status === 200) {
                 alert("Transcription updated!");
                 setIsEditing(false);
-                router.refresh(); // Trigger SSR update if needed
+                router.refresh(); // Trigger SSR update if needed, not sure if this will work
             }
         } catch (error) {
             console.error("Error updating:", error);
         }
     };
 
+
+    // for handling status dropdown changes 
+    const handleSelect = (option: string) => {
+        setStatus(option);
+        setIsOpen(false);
+    };
     // if (loading || !transcript) {
     //   return <div className="p-4 text-center">Loading...</div>;
     // }
@@ -73,10 +85,10 @@ export default function EditPage({
             >
                 {isEditing ? "Go to Reading mode" : "Go to Edit mode"}
             </button>
-
             {isEditing ? (
                 <form onSubmit={handleSave}>
                     <div className="m-4">
+                    <Dropdown handleSelect={handleSelect} status={status} isOpen={isOpen} setIsOpen={setIsOpen}></Dropdown>
                         <label className="block">Title</label>
                         <input
                             value={updatedTitle}

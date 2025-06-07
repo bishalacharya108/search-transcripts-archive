@@ -7,7 +7,10 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { revalidatePath, revalidateTag } from "next/cache";
 import mongoose from "mongoose";
-import { ApprovedTranscript } from "@/modules/transcription/transcriptions.model";
+import {
+  ApprovedTranscript,
+  Transcript,
+} from "@/modules/transcription/transcriptions.model";
 import { getToken } from "next-auth/jwt";
 
 export async function GET(
@@ -66,7 +69,6 @@ export async function PATCH(
   try {
     const body = await req.json();
     const updated = await TranscriptControllers.updateATranscript(id, body);
-
     if (!updated) {
       return NextResponse.json(
         { success: false, message: "Transcript not found or update failed" },
@@ -74,24 +76,37 @@ export async function PATCH(
       );
     }
 
-    if (updated.status === "approved" && token?.role === "admin") {
-      const mongooseSession = await mongoose.startSession();
-      try {
-        mongooseSession.startTransaction();
-        // this is a temporary solution, should have a separate module system for this because the update should have the approved admin's userId
-        const doc = await TranscriptControllers.getATranscript(id);
-        const result = await ApprovedTranscript.insertOne(doc);
-        console.log(result);
-        await mongooseSession.commitTransaction();
-        console.log("Transaction committed");
-      } catch (error) {
-        await mongooseSession.abortTransaction();
-        console.error("Transaction aborted:", error);
-      } finally {
-        await mongooseSession.endSession();
-      }
+    // non admins cannot approve
+    if (token?.role !== "admin" && body.status === "approved") {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized status change" },
+        { status: 403 },
+      );
     }
 
+    // a transaction session for inserting transactions in approved collection
+    const mongooseSession = await mongoose.startSession();
+    try {
+      // TODO: finding a better way to do transactions, especially using separate modules if possible
+      mongooseSession.startTransaction();
+      const doc = await Transcript.findById(id).session(mongooseSession).lean();
+      const { _id, ...docWithoutId } = doc;
+
+      const approvedDoc = new ApprovedTranscript({
+        ...docWithoutId,
+        approvedBy: new mongoose.Types.ObjectId(token?._id),//TODO: these two will not be updated until I update the schema 
+        approvedAt: new Date(),
+      });
+      //TODO: should validations first before insert perhaps using some middleware
+      await ApprovedTranscript.create([approvedDoc], { session: mongooseSession });
+      await Transcript.findByIdAndDelete(id).session(mongooseSession);
+      await mongooseSession.commitTransaction();
+    } catch (error) {
+      await mongooseSession.abortTransaction();
+      throw error;
+    }
+
+    // TODO: this should be done in a better way
     revalidatePath("/dashboard");
     revalidatePath("/");
     revalidatePath("/admin");

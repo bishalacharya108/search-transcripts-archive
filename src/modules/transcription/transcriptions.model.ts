@@ -54,5 +54,5 @@ export const Transcript =
 export const ApprovedTranscript =  models.ApprovedTranscript ||model<TTranscript>(
   "ApprovedTranscript",
   TranscriptSchema,
-  "approvedTransacript",
+  "approvedTranscript",
 );
