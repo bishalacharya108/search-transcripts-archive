@@ -6,7 +6,5 @@ export async function GET(req: NextRequest) {
   const token = await getToken({ req, secret });
   console.log("from test log:", token);
 
-  // const cookieHeader = req.headers.get("cookie"); // fetch cookie manually
-  // console.log(cookieHeader)
   return Response.json({ token });
 }

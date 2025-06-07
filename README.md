@@ -15,6 +15,7 @@
 - **Data validation** for all inputs
 - **History tracking** for all versions
 - **Draft status** for each upload, update, or reupload
+- **Update handling** only updating if changes happened and confirm before updating
 - Checking if the video is already exists (in  approved)
 - A list of video links that have been already transcribed
 
@@ -65,6 +66,6 @@
 ---
 
 ## Api Routes:
-- transcription- http://localhost:3000/api/transcription
+- transcription- http://localhost:3001/api/transcription
 
 ## Done already: (focusing on the backend rn)

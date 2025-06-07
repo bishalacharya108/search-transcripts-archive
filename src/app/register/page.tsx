@@ -24,7 +24,6 @@ export default function RegisterPage() {
         password,
       });
 
-      // console.log("Signup successful:", response.data);
       setTimeout(() => {
         setShowToast(true);
         router.push("/signin");
@@ -39,7 +38,6 @@ export default function RegisterPage() {
     }
   };
 
-  //
 
   return (
     <div className="hero bg-base-200 min-h-screen -mt-20">

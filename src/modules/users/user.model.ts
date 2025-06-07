@@ -40,3 +40,4 @@ export const UserSchema = new Schema<TUser>({
 });
 
 export const User = models.User || model<TUser>("User", UserSchema);
+

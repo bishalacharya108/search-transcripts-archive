@@ -47,7 +47,6 @@ export const sendEmail = async ({
         pass: "ce2346d81c4a3b3c0ba9826a3cd56898"
       }
     });
-    console.log("Transporter created");
 
     const actionUrl = `${emailType === "VERIFY" ? verificationLink : resetPassLink}?token=${generatedId}&id=${userId}`;
 
