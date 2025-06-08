@@ -1,17 +1,16 @@
 import connectDB from "@/config/db";
 import { TranscriptServices } from "@/modules/transcription/transcriptions.services";
 import { getServerSession } from "next-auth";
-
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { revalidatePath, revalidateTag } from "next/cache";
 import mongoose from "mongoose";
 import {
-  ApprovedTranscript,
   Transcript,
 } from "@/modules/transcription/transcriptions.model";
 import { getToken } from "next-auth/jwt";
+import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model";
 
 export async function GET(
   req: NextRequest,
@@ -43,7 +42,6 @@ export async function GET(
       { status: 200 },
     );
   } catch (error) {
-    // console.error(`[GET /api/transcription/${id}]`, error);
     return NextResponse.json(
       {
         success: false,

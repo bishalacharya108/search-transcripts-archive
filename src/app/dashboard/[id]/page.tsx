@@ -9,7 +9,7 @@ import EditPage from "./editPage";
 
 export default async function Expand({ params }) {
     const { id } = await params
-    const response = await fetch(`http://localhost:3001/api/transcription/${id}`, { next: { revalidate: 60 } });
+    const response = await fetch(`http://localhost:3000/api/transcription/${id}`, { next: { revalidate: 60 } });
     const { data: transcript }: { data: TTranscript } = await response.json();
     const readableDate = new Date(transcript.uploadedAt).toLocaleString();
     const markdownText = transcript?.markdown;

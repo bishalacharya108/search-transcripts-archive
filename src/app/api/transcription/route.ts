@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   //   );
   // }
 
-  await connectDB();
+  await connectDB().then(() => console.log("DB connecition Completed"));
 
   try {
     const data = await req.json();

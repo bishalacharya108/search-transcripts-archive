@@ -66,6 +66,6 @@
 ---
 
 ## Api Routes:
-- transcription- http://localhost:3001/api/transcription
+- transcription- http://localhost:3000/api/transcription
 
 ## Done already: (focusing on the backend rn)

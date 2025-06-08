@@ -66,7 +66,6 @@ export const sendEmail = async ({
     if (process.env.NODE_ENV === "development") {
       console.log("Preview URL:", nodemailer.getTestMessageUrl(mailResponse));
     }
-    console.log(mailResponse);
     return mailResponse;
   } catch (error: any) {
     console.error("Error occurred while sending email:", error); 

@@ -9,7 +9,6 @@ import Loading from "./Loading";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 export default function Navbar({ session }: { session: any }) {
   // const { data: session, status } = useSession(); // Get session data and status
-  // console.log(session);
   const links = (
     <>
       <li>

@@ -1,7 +1,7 @@
 import { Schema, model, models, HydratedDocument } from "mongoose";
 import { TTranscript } from "./transcriptions.interface";
 
-const TranscriptSchema = new Schema<TTranscript>(
+export const TranscriptSchema = new Schema<TTranscript>(
   {
     title: {
       type: String,
@@ -51,8 +51,8 @@ export type TranscriptDocument = HydratedDocument<TTranscript>;
 export const Transcript =
   models.Transcript || model<TTranscript>("Transcript", TranscriptSchema);
 
-export const ApprovedTranscript =  models.ApprovedTranscript ||model<TTranscript>(
-  "ApprovedTranscript",
-  TranscriptSchema,
-  "approvedTranscript",
-);
+// export const ApprovedTranscript =  models.ApprovedTranscript ||model<TTranscript>(
+//   "ApprovedTranscript",
+//   TranscriptSchema,
+//   "approvedTranscript",
+// );
