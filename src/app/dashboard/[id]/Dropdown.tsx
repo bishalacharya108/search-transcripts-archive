@@ -1,7 +1,7 @@
 export const Dropdown = ({ handleSelect, setIsOpen, isOpen, status }) => {
     const options = ["pending", "approved"]
     return (
-        <div className="relative  inline-block text-left">
+        <div className="relative  inline-block text-left text-black">
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}

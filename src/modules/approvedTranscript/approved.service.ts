@@ -10,5 +10,4 @@ const getAllApprovedFromDB = async()=>{
 }
 
 
-
 export const ApprovedTranscriptService = {getAllApprovedFromDB}
