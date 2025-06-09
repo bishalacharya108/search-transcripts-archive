@@ -64,7 +64,6 @@ export async function GET(req: NextRequest) {
       {
         success: true,
         message: "Trancsripts Fetched Successfully",
-        token,
         data: result,
       },
       { status: 200 },

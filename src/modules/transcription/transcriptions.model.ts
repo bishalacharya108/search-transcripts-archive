@@ -23,23 +23,18 @@ export const TranscriptSchema = new Schema<TTranscript>(
         message: "Invalid YouTube URL",
       },
     },
-    // tags: {
-    //   type: [String],
-    //   default: [],
-    // },
     status: {
       type: String,
       enum: ["pending", "approved"],
       default: "pending",
-      // index: true // For faster querying
     },
-    uploadedAt: {
-      type: Date,
-      default: Date.now,
-    },
-    lastUpdatedAt: {
-      type: Date,
-    },
+    // uploadedAt: {
+    //   type: Date,
+    //   default: Date.now,
+    // },
+    // lastUpdatedAt: {
+    //   type: Date,
+    // },
   },
   { timestamps: true },
 );

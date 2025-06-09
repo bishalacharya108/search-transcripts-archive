@@ -5,10 +5,7 @@ export type TTranscript = {
   markdown: string;
   videoUrl?: string;
   speaker?: string;
-  // tags: string[];
-  uploadedAt: Date;
   status: 'pending' | 'approved';
-  lastUpdatedAt: Date;
 };
 
 // For mongoose

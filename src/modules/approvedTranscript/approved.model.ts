@@ -1,11 +1,17 @@
-import { model, models, Schema } from "mongoose";
+import mongoose, { model, models, Schema } from "mongoose";
 import { TranscriptSchema } from "../transcription/transcriptions.model";
 
-export const ApprovedTranscriptSchema = TranscriptSchema.discriminator(
-  'ApprovedTranscript',
-  new Schema({
-    approvedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    approvedAt: { type: Date, required: true }
-  })
+const ApprovedTranscriptSchema = new Schema(
+  {
+    ...TranscriptSchema.obj,
+    approvedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    approvedAt: { type: Date, required: true },
+  },
+  { timestamps: true },
 );
-export const ApprovedTranscript =  models.ApprovedTranscript ||model("ApprovedTranscript", ApprovedTranscriptSchema )
+if (mongoose.models.ApprovedTranscript) {
+  delete mongoose.models.ApprovedTranscript;
+}
+export const ApprovedTranscript =
+  models.ApprovedTranscript ||
+  model("ApprovedTranscript", ApprovedTranscriptSchema);

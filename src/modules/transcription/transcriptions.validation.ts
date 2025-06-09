@@ -20,11 +20,6 @@ export const TranscriptValidationSchema = z.object({
   status: z.enum(["pending", "approved"])
     .default("pending"),
 
-  uploadedAt: z.date()
-    .default(new Date()),
-    
-  lastUpdatedAt: z.date()
-    .optional()
 
 });
 

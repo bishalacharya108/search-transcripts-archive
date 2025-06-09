@@ -6,9 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { revalidatePath, revalidateTag } from "next/cache";
 import mongoose from "mongoose";
-import {
-  Transcript,
-} from "@/modules/transcription/transcriptions.model";
+import { Transcript } from "@/modules/transcription/transcriptions.model";
 import { getToken } from "next-auth/jwt";
 import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model";
 
@@ -66,6 +64,14 @@ export async function PATCH(
   // const session = await getServerSession(authOptions);
   try {
     const body = await req.json();
+    // non admins cannot change the status to approved
+    if (token?.role !== "admin" && body.status === "approved") {
+        return NextResponse.json(
+            { success: false, message: "Unauthorized status change" },
+            { status: 403 },
+        );
+    }
+    //TODO: only update the original if it is not approved
     const updated = await TranscriptControllers.updateATranscript(id, body);
     if (!updated) {
       return NextResponse.json(
@@ -74,13 +80,6 @@ export async function PATCH(
       );
     }
 
-    // non admins cannot approve
-    if (token?.role !== "admin" && body.status === "approved") {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized status change" },
-        { status: 403 },
-      );
-    }
 
     // a transaction session for inserting transactions in approved collection
     const mongooseSession = await mongoose.startSession();
@@ -92,11 +91,11 @@ export async function PATCH(
 
       const approvedDoc = new ApprovedTranscript({
         ...docWithoutId,
-        approvedBy: new mongoose.Types.ObjectId(token?._id),//TODO: these two will not be updated until I update the schema 
+        approvedBy: new mongoose.Types.ObjectId(token?._id), //TODO: these two will not be updated until I update the schema
         approvedAt: new Date(),
       });
       //TODO: should validations first before insert perhaps using some middleware
-      await ApprovedTranscript.create([approvedDoc], { session: mongooseSession });
+      await approvedDoc.save({session: mongooseSession})
       await Transcript.findByIdAndDelete(id).session(mongooseSession);
       await mongooseSession.commitTransaction();
     } catch (error) {
@@ -119,7 +118,6 @@ export async function PATCH(
       { status: 200 },
     );
   } catch (error) {
-    console.error(`[PATCH /api/transcription/${id}]`, error);
     return NextResponse.json(
       { success: false, message: "Error updating transcript", error },
       { status: 500 },
@@ -145,7 +143,6 @@ export async function DELETE(
       { status: 401 },
     );
   }
-  console.log("Session in delete", session);
   await connectDB();
   try {
     const deleted = await TranscriptServices.deleteTranscriptionFromDB(
