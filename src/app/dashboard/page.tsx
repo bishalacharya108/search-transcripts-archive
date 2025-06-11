@@ -14,7 +14,7 @@ export default async function Page() {
     <div>
         {
             sortedTranscripts.map((transcript) =>
-            <DashboardCard key={transcript._id} transcript = {transcript}>
+            <DashboardCard key={transcript._id} transcript = {transcript} approved = {true}>
             
             </DashboardCard>)
 	    

@@ -16,7 +16,7 @@ export default async function Home() {
             <p>Here are the transcripts approved by the admins
             </p>
             {
-                sortedTranscripts.map(transcript => <DashboardCard key={transcript._id} transcript={transcript}></DashboardCard>)
+                sortedTranscripts.map(transcript => <DashboardCard key={transcript._id} transcript={transcript} approved = {true}></DashboardCard>)
 
             }
         </div>

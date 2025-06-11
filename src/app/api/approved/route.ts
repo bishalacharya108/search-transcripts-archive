@@ -16,6 +16,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: error.message || "Failed to get all approved docs",
-    }, {status: 400});
+    }, {});
   }
 }
