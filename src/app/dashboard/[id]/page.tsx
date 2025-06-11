@@ -11,7 +11,7 @@ export default async function Expand({ params }) {
     const { id } = await params
     const response = await fetch(`http://localhost:3000/api/transcription/${id}`, { next: { revalidate: 60 } });
     const { data: transcript }: { data: TTranscript } = await response.json();
-    const readableDate = new Date(transcript.uploadedAt).toLocaleString();
+    const readableDate = new Date(transcript.createdAt).toLocaleString();
     const markdownText = transcript?.markdown;
     const processedContent = await remark()
         .use(html)
@@ -34,7 +34,7 @@ export default async function Expand({ params }) {
                                 </button>
                             </Link>
                         </div>
-                        {transcript?.uploadedAt && <p className="text-sm text-gray-500 mb-6">
+                        {transcript?.createdAt && <p className="text-sm text-gray-500 mb-6">
                             Upload Date: {readableDate}
                         </p>}
                         {

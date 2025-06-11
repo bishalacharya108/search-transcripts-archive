@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/options";
 import DashboardCard from "@/components/DashboardCard";
 import { TTranscript } from "@/modules/transcription/transcriptions.interface";
+import { Transcript } from "@/modules/transcription/transcriptions.model";
 
 export default async function AdminPanel() {
     const session = await getServerSession(authOptions);
@@ -15,7 +16,7 @@ export default async function AdminPanel() {
 
     // sorting transcripts
     const sortedTranscripts = transcripts.sort(
-        (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     return (
         <div>
