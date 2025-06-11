@@ -1,6 +1,5 @@
 import connectDB from "@/config/db";
 import { ApprovedController } from "@/modules/approvedTranscript/approved.controllers";
-import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

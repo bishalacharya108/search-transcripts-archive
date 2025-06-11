@@ -15,6 +15,7 @@ const DashboardCard = ({ transcript, approved = false }) => {
                         {markdown.length > 500 ? `${markdown.slice(0, 500)}...` : markdown}
                     </p>
                     <div className="justify-end card-actions">
+                    {/*sending approved status as query*/}
                         <Link href={{ pathname: `/dashboard/${_id}`, query: { approved } }}>
                             <button className="btn btn-primary">Expand</button></Link>
                     </div>

@@ -27,8 +27,8 @@ export default async function Expand({ params, searchParams }) {
     return (
         <div>
             {
-                transcript && <div className="max-w-7xl mx-auto p-6">
-
+                transcript && 
+                    <div className="max-w-7xl mx-auto p-6">
                     <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-8">
 
                         <div className="mb-3">
