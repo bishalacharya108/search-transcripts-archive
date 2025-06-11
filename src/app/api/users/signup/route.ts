@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
   try {
     const reqData = await req.json();
     const { userName, email, password } = reqData;
-
     
     const user = await User.findOne({email});
     if (user ){
@@ -25,15 +24,11 @@ export async function POST(req: NextRequest) {
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
 
-
-    
     // goto user services for post
     const newUser = {userName, email, password: hashedPassword};
     const validatedUser = userValidationSchema.parse(newUser);
     const result = await UserServices.createNewUser(validatedUser)
    
-
-
     //   send verification mail
       // const mailResponse = await sendEmail({email, emailType: "VERIFY", userId: (result as any)._id });
     

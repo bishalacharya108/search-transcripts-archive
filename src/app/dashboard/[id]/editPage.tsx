@@ -85,10 +85,12 @@ export default function EditPage({
             >
                 {isEditing ? "Go to Reading mode" : "Go to Edit mode"}
             </button>
+
+            {/*checking the mode edit or reading mode*/}
             {isEditing ? (
                 <form onSubmit={handleSave}>
                     <div className="m-4">
-                    <Dropdown handleSelect={handleSelect} status={status} isOpen={isOpen} setIsOpen={setIsOpen}></Dropdown>
+                        <Dropdown handleSelect={handleSelect} status={status} isOpen={isOpen} setIsOpen={setIsOpen}></Dropdown>
                         <label className="block">Title</label>
                         <input
                             value={updatedTitle}
@@ -106,8 +108,7 @@ export default function EditPage({
                         />
                     </div>
                     <div className="m-4">
-                        <label className="block" htmlFor="markdown"
-                        >Markdown</label>
+                        <label className="block" htmlFor="markdown">Markdown</label>
                         <textarea
                             value={markdown}
                             onChange={(e) => setMarkdown(e.target.value)}
@@ -115,35 +116,36 @@ export default function EditPage({
                         />
                     </div>
                     <div className="m-4">
-
                         <button type="submit" className="btn btn-accent">Update</button>
                         <button type="button" onClick={() => setIsEditing(false)} className="btn btn-error ml-1">Cancel</button>
                     </div>
                 </form>
-            ) : (
-                <div>
-                    <h1 className="text-3xl font-semibold mb-2">{updatedTitle}</h1>
-                    {videoUrl && (
-                        <div className="mb-4">
-                            <iframe
-                                width="853"
-                                height="480"
-                                src={videoUrl}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title="Embedded video"
+            )
+                :
+                (
+                    <div>
+                        <h1 className="text-3xl font-semibold mb-2">{updatedTitle}</h1>
+                        {videoUrl && (
+                            <div className="mb-4">
+                                <iframe
+                                    width="853"
+                                    height="480"
+                                    src={videoUrl}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    title="Embedded video"
+                                />
+                            </div>
+                        )}
+                        <div className="overflow-x-auto">
+                            <article
+                                className="prose prose-lg dark:prose-invert break-words whitespace-pre-wrap"
+                                dangerouslySetInnerHTML={{ __html: markdownHtml }}
                             />
                         </div>
-                    )}
-                    <div className="overflow-x-auto">
-                        <article
-                            className="prose prose-lg dark:prose-invert break-words whitespace-pre-wrap"
-                            dangerouslySetInnerHTML={{ __html: markdownHtml }}
-                        />
                     </div>
-                </div>
-            )}
+                )}
         </div>
     );
 }

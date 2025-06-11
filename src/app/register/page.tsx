@@ -5,56 +5,56 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showToast, setShowToast] = useState(false);
+    const router = useRouter();
+    const [errorMessage, setErrorMessage] = useState("");
+    const [showToast, setShowToast] = useState(false);
 
-  // function to handle submit
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const email = form.get("email");
-    const userName = form.get("name");
-    const password = form.get("password");
-    setErrorMessage("");
-    try {
-      const response = await axios.post("/api/users/signup", {
-        email,
-        userName,
-        password,
-      });
+    // function to handle submit
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const form = new FormData(e.currentTarget);
+        const email = form.get("email");
+        const userName = form.get("name");
+        const password = form.get("password");
+        setErrorMessage("");
+        try {
+            const response = await axios.post("/api/users/signup", {
+                email,
+                userName,
+                password,
+            });
 
-      setTimeout(() => {
-        setShowToast(true);
-        router.push("/signin");
-      }, 2000);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "An unexpected error occurred during signup.";
+            setTimeout(() => {
+                setShowToast(true);
+                router.push("/signin");
+            }, 2000);
+        } catch (error: any) {
+            const message =
+                error?.response?.data?.message ||
+                error?.message ||
+                "An unexpected error occurred during signup.";
 
-      setErrorMessage(message);
-    }
-  };
+            setErrorMessage(message);
+        }
+    };
 
 
-  return (
-    <div className="hero bg-base-200 min-h-screen -mt-20">
-      <AuthForm
-        title={"Register"}
-        buttonText="register"
-        onSubmit={handleRegister}
-        showName={true}
-        errorMessage={errorMessage}
-      ></AuthForm>
-      {showToast && (
-        <div className="toast toast-top toast-center z-50">
-          <div className="alert alert-success">
-            <span>Registration successful!</span>
-          </div>
+    return (
+        <div className="hero bg-base-200 min-h-screen -mt-20">
+            <AuthForm
+                title={"Register"}
+                buttonText="register"
+                onSubmit={handleRegister}
+                showName={true}
+                errorMessage={errorMessage}
+            ></AuthForm>
+            {showToast && (
+                <div className="toast toast-top toast-center z-50">
+                    <div className="alert alert-success">
+                        <span>Registration successful!</span>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }

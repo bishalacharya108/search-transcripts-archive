@@ -10,11 +10,12 @@ export default async function Home() {
     );
     return (
         <div>
-            <p>Welcome to Homepage
-            </p>
             <p>
-            Here are the transcripts approved by the admins
-                {/*home page only shows approved transcripts*/}
+                Welcome to Homepage
+            </p>
+            {/*home page only shows approved transcripts*/}
+            <p>
+                Here are the transcripts approved by the admins
             </p>
             {
                 sortedTranscripts.map(transcript => <DashboardCard key={transcript._id} transcript={transcript} approved={true}></DashboardCard>)

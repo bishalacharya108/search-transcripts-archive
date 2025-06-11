@@ -7,7 +7,6 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
-  console.log("id from slug of approved",id)
   await connectDB();
   try {
     const result = await ApprovedController.getAnApproved(id);

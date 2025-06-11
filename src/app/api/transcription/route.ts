@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const validatedData = TranscriptValidationSchema.parse(data);
 
-    // getting data using controllers. still undecided on the functionalities controllers in this case
+    // getting data using controllers. still undecided on whether to use controllers in cases like these
     // probably will delete controllers later and directly call from services
     const result = await TranscriptControllers.createTranscript(validatedData);
     revalidatePath("/dashboard");
@@ -52,10 +52,6 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const secret = process.env.NEXTAUTH_SECRET;
-  const token = await getToken({ req, secret });
-  // if (token?.role === "admin") console.log("yes, this is admin", token);
-  // else console.log("this is not admin");
   await connectDB();
 
   try {

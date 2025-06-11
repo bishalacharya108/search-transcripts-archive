@@ -1,10 +1,10 @@
 export default function getYouTubeEmbedUrl(videoUrl: string): string {
   if (!videoUrl) return "";
 
-  // Regex to extract video ID from various YouTube URL formats
+  // Regex to extract embedded url from various different YouTube URL formats
   const regex =
-      /(?:youtu\.be\/|youtube(?:music)?\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|live\/|playlist\?.*?v=|.*?\/live\/))([\w-]{11})(?:[&\?].*)?/;
- const match = videoUrl.match(regex);
+    /(?:youtu\.be\/|youtube(?:music)?\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|live\/|playlist\?.*?v=|.*?\/live\/))([\w-]{11})(?:[&\?].*)?/;
+  const match = videoUrl.match(regex);
   if (match && match[1]) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }

@@ -4,10 +4,7 @@ import Navbar from "./Navbar";
 
 
 export default async function NavbarServer() {
-  const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions)
 
-
-return <Navbar session={session}></Navbar>
-
-
+    return <Navbar session={session}></Navbar>
 }

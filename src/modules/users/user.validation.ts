@@ -12,5 +12,5 @@ export const userValidationSchema = z.object({
   verifyTokenExpiry: z.date().optional(),
 });
 
-
 export const userUpdateSchema = userValidationSchema.partial();
+

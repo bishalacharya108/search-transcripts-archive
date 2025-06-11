@@ -57,7 +57,7 @@ export async function PATCH(
   { params }: { params: { id: string } },
 ) {
   const { id } = await params;
-  //  we should probably check the role of the user here, because admins and verified users can upload only
+  //  we should probably check the role of the user here, because only admins and verified users can upload 
   await connectDB();
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
@@ -72,6 +72,7 @@ export async function PATCH(
         );
     }
     //TODO: only update the original if it is not approved
+    // NOTE: this update does take into account the recent approved doc page update system
     const updated = await TranscriptControllers.updateATranscript(id, body);
     if (!updated) {
       return NextResponse.json(

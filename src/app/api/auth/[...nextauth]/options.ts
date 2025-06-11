@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     // for now I don't need it
-    // if any page is needed to be overrided we will override here
+    // if any page is needed to be overrode we will override here
   },
 
   callbacks: {
@@ -99,7 +99,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   session: {
-    strategy: "jwt", // we can use db or jwt, using jwt for now
+    strategy: "jwt", // we can use db or jwt.. using jwt for now
     maxAge: 24 * 60 * 60,
     updateAge: 4 * 60 * 60,
   },

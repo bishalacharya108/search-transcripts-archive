@@ -4,8 +4,8 @@ export type TUser = {
   password: string;
   role: "admin" | "contributor" | "viewer";
   isVerified: boolean;
-  forgotPasswordToken: string,
-  forgotPasswordTokenExpiry: Date,
-  verifyToken: string,
-  verifyTokenExpiry: Date
+  forgotPasswordToken: string;
+  forgotPasswordTokenExpiry: Date;
+  verifyToken: string;
+  verifyTokenExpiry: Date;
 };

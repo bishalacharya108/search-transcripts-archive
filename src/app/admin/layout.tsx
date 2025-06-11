@@ -1,3 +1,4 @@
+//NOTE: not in use anywhere yet
 export default function DashboardLayout({
   children,
 }: {
