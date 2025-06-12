@@ -57,19 +57,18 @@ export async function PATCH(
   { params }: { params: { id: string } },
 ) {
   const { id } = await params;
-  //  we should probably check the role of the user here, because only admins and verified users can upload 
+  //  we should probably check the role of the user here, because only admins and verified users can upload
   await connectDB();
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
-  // const session = await getServerSession(authOptions);
   try {
     const body = await req.json();
     // non admins cannot change the status to approved
     if (token?.role !== "admin" && body.status === "approved") {
-        return NextResponse.json(
-            { success: false, message: "Unauthorized status change" },
-            { status: 403 },
-        );
+      return NextResponse.json(
+        { success: false, message: "Unauthorized status change" },
+        { status: 403 },
+      );
     }
     //TODO: only update the original if it is not approved
     // NOTE: this update does take into account the recent approved doc page update system
@@ -81,27 +80,31 @@ export async function PATCH(
       );
     }
 
-
+    // TODO: this is a very inefficient way to do this but still
     // a transaction session for inserting transactions in approved collection
     const mongooseSession = await mongoose.startSession();
-    try {
-      // TODO: finding a better way to do transactions, especially using separate modules if possible
-      mongooseSession.startTransaction();
-      const doc = await Transcript.findById(id).session(mongooseSession).lean();
-      const { _id, ...docWithoutId } = doc;
+    if (body.status === "approved") {
+      try {
+        // TODO: finding a better way to do transactions, especially using separate modules if possible
+        mongooseSession.startTransaction();
+        const doc = await Transcript.findById(id)
+          .session(mongooseSession)
+          .lean();
+        const { _id, ...docWithoutId } = doc;
 
-      const approvedDoc = new ApprovedTranscript({
-        ...docWithoutId,
-        approvedBy: new mongoose.Types.ObjectId(token?._id), //TODO: these two will not be updated until I update the schema
-        approvedAt: new Date(),
-      });
-      //TODO: should validations first before insert perhaps using some middleware
-      await approvedDoc.save({session: mongooseSession})
-      await Transcript.findByIdAndDelete(id).session(mongooseSession);
-      await mongooseSession.commitTransaction();
-    } catch (error) {
-      await mongooseSession.abortTransaction();
-      throw error;
+        const approvedDoc = new ApprovedTranscript({
+          ...docWithoutId,
+          approvedBy: new mongoose.Types.ObjectId(token?._id),
+          approvedAt: new Date(),
+        });
+        //TODO: should validations first before insert perhaps using some middleware
+        await approvedDoc.save({ session: mongooseSession });
+        await Transcript.findByIdAndDelete(id).session(mongooseSession);
+        await mongooseSession.commitTransaction();
+      } catch (error) {
+        await mongooseSession.abortTransaction();
+        throw error;
+      }
     }
 
     // TODO: this should be done in a better way

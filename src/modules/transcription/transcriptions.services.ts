@@ -32,7 +32,7 @@ const updateTranscriptionInDB = async (
         const updatedTranscript = await Transcript.findByIdAndUpdate(
           new mongoose.Types.ObjectId(id),
           updateData,
-          { new: true, upsert: true, runValidators: true }
+          { new: true, upsert: true, runValidators: true, version: true  }
         );
       
         return updatedTranscript; 

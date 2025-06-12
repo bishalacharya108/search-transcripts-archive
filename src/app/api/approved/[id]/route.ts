@@ -6,7 +6,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  const { id } = params;
+  const { id } = await params;
   await connectDB();
   try {
     const result = await ApprovedController.getAnApproved(id);
