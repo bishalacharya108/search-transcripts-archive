@@ -1,6 +1,7 @@
 import connectDB from "@/config/db";
 import { ApprovedController } from "@/modules/approvedTranscript/approved.controllers";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET(
   req: NextRequest,
@@ -38,6 +39,12 @@ export async function PATCH(
   try {
     const body = await req.json();
     const result = await ApprovedController.updateApprovedDoc(id, body);
+
+    revalidatePath("/dashboard");
+    revalidatePath("/");
+    revalidatePath("/admin");
+    revalidateTag("transcription");
+    revalidateTag("dashboard");
     return NextResponse.json(
       {
         success: true,
