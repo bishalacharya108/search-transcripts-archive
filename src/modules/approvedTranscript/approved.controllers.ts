@@ -1,15 +1,15 @@
+import { ApprovedTranscript } from "./approved.model";
 import { ApprovedTranscriptService } from "./approved.service";
 
 const getAllApproved = async () => {
-    try {
-        const result = await ApprovedTranscriptService.getAllApprovedFromDB();
-        return result;
-    } catch (error) {
-        throw new Error(error.message || "Error getting all approved documents");
-    }
+  try {
+    const result = await ApprovedTranscriptService.getAllApprovedFromDB();
+    return result;
+  } catch (error) {
+    throw new Error(error.message || "Error getting all approved documents");
+  }
 };
 const getAnApproved = async (id: string) => {
-
   try {
     const result = await ApprovedTranscriptService.getAnApprovedFromDB(id);
     return result;
@@ -17,5 +17,19 @@ const getAnApproved = async (id: string) => {
     throw new Error(error.message || "Error getting all approved documents");
   }
 };
+const updateApprovedDoc = async (
+  id: string,
+  data: Partial<typeof ApprovedTranscript.prototype>
+) => {
+  try {
+    const result = await ApprovedTranscriptService.updateApprovedDocFromDB(id, data);
+    return result;
+  } catch (error) {}
+  throw new Error(error || "Error Updating Approved Docs");
+};
 
-export const ApprovedController = { getAllApproved, getAnApproved };
+export const ApprovedController = {
+  getAllApproved,
+  getAnApproved,
+  updateApprovedDoc,
+};

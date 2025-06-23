@@ -28,3 +28,31 @@ export async function GET(
     );
   }
 }
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const { id } = await params;
+  await connectDB();
+  try {
+    const body = await req.json();
+    const result = await ApprovedController.updateApprovedDoc(id, body);
+    return NextResponse.json(
+      {
+        success: true,
+        data: result,
+        message: "Successfully updated approved doc",
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: true,
+        message: error.message || "Failed to update approved doc",
+      },
+      {},
+    );
+  }
+}

@@ -14,7 +14,6 @@ export default async function Expand({ params, searchParams }) {
     const response = isApproved ? await fetch(`http://localhost:3000/api/approved/${id}`, { next: { revalidate: 60 } })
         : await fetch(`http://localhost:3000/api/transcription/${id}`, { next: { revalidate: 60 } });
     const { data: transcript }: { data: TTranscript } = await response.json();
-    console.log("transcript: ", transcript)
 
     const readableDate = new Date(transcript.createdAt).toLocaleString();
     const markdownText = transcript?.markdown;
@@ -44,7 +43,7 @@ export default async function Expand({ params, searchParams }) {
                             Upload Date: {readableDate}
                         </p>}
                         {/*this edit component will toggle between reading to edit mode*/}
-                        <EditPage transcript={transcript} convertedUrl={convertedUrl} markdownHtml={markdownHtml}></EditPage>
+                        <EditPage isApproved = {isApproved} transcript={transcript} convertedUrl={convertedUrl} markdownHtml={markdownHtml}></EditPage>
                     </div>
                 </div>
             }

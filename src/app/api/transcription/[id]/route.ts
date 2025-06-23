@@ -81,7 +81,7 @@ export async function PATCH(
     }
 
     // TODO: this is a very inefficient way to do this but still
-    // a transaction session for inserting transactions in approved collection
+    // A transaction session for inserting transactions in approved collection
     const mongooseSession = await mongoose.startSession();
     if (body.status === "approved") {
       try {
@@ -168,7 +168,6 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    console.error(`[DELETE /api/transcription/${params.id}]`, error);
     return NextResponse.json(
       { success: false, message: "Error deleting transcript", error },
       { status: 500 },

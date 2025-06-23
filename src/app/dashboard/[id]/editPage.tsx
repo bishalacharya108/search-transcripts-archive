@@ -7,17 +7,20 @@ import html from "remark-html";
 import { TTranscript } from "@/modules/transcription/transcriptions.interface";
 import { Transcript } from "@/modules/transcription/transcriptions.model";
 import { Dropdown } from "./Dropdown";
+import { boolean } from "zod";
 
 type TEditParam = {
     transcript: TTranscript;
     markdownHtml: string;
     convertedUrl: string;
+    isApproved: boolean
 };
 
 export default function EditPage({
     transcript: initialTranscript,
     markdownHtml: initialHtml,
     convertedUrl: initialUrl,
+    isApproved
 }: TEditParam) {
     const router = useRouter();
     const [_id] = [initialTranscript._id];
@@ -46,11 +49,13 @@ export default function EditPage({
     }, [markdown]);
 
     const handleSave = async (e: React.FormEvent) => {
+        
         e.preventDefault();
         if (!confirm("Do you want to update?")) return;
-
+        console.log("approved : ", isApproved)
         try {
-            const response = await axios.patch(`/api/transcription/${_id}`, {
+            const link = isApproved ? `/api/approved/${_id}` : `/api/transcription/${_id}`
+            const response = await axios.patch(link, {
                 title: updatedTitle,
                 markdown,
                 videoUrl,
