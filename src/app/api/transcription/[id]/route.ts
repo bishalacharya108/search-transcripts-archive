@@ -64,7 +64,7 @@ export async function PATCH(
   try {
     const body = await req.json();
     // non admins cannot change the status to approved
-    if (token?.role !== "admin" && body.status === "approved") {
+    if (token?.role !== "admin" && body.data.status === "approved") {
       return NextResponse.json(
         { success: false, message: "Unauthorized status change" },
         { status: 403 },
@@ -72,7 +72,8 @@ export async function PATCH(
     }
     //TODO: only update the original if it is not approved
     // NOTE: this update does take into account the recent approved doc page update system
-    const updated = await TranscriptControllers.updateATranscript(id, body);
+    const updated = await TranscriptControllers.updateATranscript(id,body.data);
+    console.log("here is the updated", updated)
     if (!updated) {
       return NextResponse.json(
         { success: false, message: "Transcript not found or update failed" },
@@ -83,7 +84,7 @@ export async function PATCH(
     // TODO: this is a very inefficient way to do this but still
     // A transaction session for inserting transactions in approved collection
     const mongooseSession = await mongoose.startSession();
-    if (body.status === "approved") {
+    if (body.data.status === "approved") {
       try {
         // TODO: finding a better way to do transactions, especially using separate modules if possible
         mongooseSession.startTransaction();
@@ -99,6 +100,7 @@ export async function PATCH(
         });
         //TODO: should validations first before insert perhaps using some middleware
         await approvedDoc.save({ session: mongooseSession });
+        console.log(approvedDoc)
         await Transcript.findByIdAndDelete(id).session(mongooseSession);
         await mongooseSession.commitTransaction();
       } catch (error) {

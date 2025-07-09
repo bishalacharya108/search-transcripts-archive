@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { remark } from "remark";
 import html from "remark-html";
 import { TTranscript } from "@/modules/transcription/transcriptions.interface";
-import { Transcript } from "@/modules/transcription/transcriptions.model";
 import { Dropdown } from "./Dropdown";
-import { boolean } from "zod";
 
 type TEditParam = {
     transcript: TTranscript;
@@ -26,7 +24,6 @@ export default function EditPage({
     const [_id] = [initialTranscript._id];
 
     const [loading, setLoading] = useState(true);
-    //
     // const [transcript, setTranscript] = useState<TTranscript | null>(initialTranscript);
     const [videoUrl, setVideoUrl] = useState<string>(initialUrl || "");
     const [markdown, setMarkdown] = useState<string>(initialTranscript.markdown || "");
@@ -49,17 +46,23 @@ export default function EditPage({
     }, [markdown]);
 
     const handleSave = async (e: React.FormEvent) => {
-        
         e.preventDefault();
         if (!confirm("Do you want to update?")) return;
-        console.log("approved : ", isApproved)
         try {
             const link = isApproved ? `/api/approved/${_id}` : `/api/transcription/${_id}`
-            const response = await axios.patch(link, {
+            console.log("yes link has been hit", link)
+            //TODO: don't need the initialTranscript for versioning if transcript is not approved
+            const data = {
                 title: updatedTitle,
                 markdown,
                 videoUrl,
                 status
+            }
+            console.log("this is from client",data)
+            const response = await axios.patch(link, {
+                data,
+
+                initialTranscript
             });
 
             if (response.status === 200) {
