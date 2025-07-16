@@ -11,9 +11,9 @@ export const ApprovedTranscriptSchema = new Schema(
   { timestamps: true },
 );
 
-if (mongoose.models.ApprovedTranscript) {
-  delete mongoose.models.ApprovedTranscript;
-}
+// if (mongoose.models.ApprovedTranscript) {
+//   delete mongoose.models.ApprovedTranscript;
+// }
 export const ApprovedTranscript =
   models.ApprovedTranscript ||
   model("ApprovedTranscript", ApprovedTranscriptSchema);

@@ -1,6 +1,7 @@
 import { Schema, model, models, HydratedDocument } from "mongoose";
 import { TTranscript } from "./transcriptions.interface";
 
+//TODO: probably should add a Uploaded By field
 export const TranscriptSchema = new Schema<TTranscript>(
   {
     title: {
@@ -17,7 +18,7 @@ export const TranscriptSchema = new Schema<TTranscript>(
       type: String,
       validate: {
         validator: (v: string) => {
-          // need to add for the other platforms also
+          //TODO: need to add for the other platforms also
           return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.+/.test(v);
         },
         message: "Invalid YouTube URL",

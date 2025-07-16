@@ -47,9 +47,9 @@ export async function PATCH(
     const { data } = await req.json();
     if (data.status !== "approved") throw new Error("Status not approved");
 
-    // this way to do it sucks
-    // TODO: add version numbers and users also maybe I don't need to put everything in the versions
-    //TODO: use a transaction here to create versions of the updated doc
+    // this way to do transactions sucks
+    // TODO: I don't need to put everything in the versions
+    // TODO: add user info who updated it
     const mongooseSession = await mongoose.startSession();
     try {
       mongooseSession.startTransaction();
