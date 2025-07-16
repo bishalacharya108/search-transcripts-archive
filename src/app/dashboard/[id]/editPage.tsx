@@ -50,8 +50,7 @@ export default function EditPage({
         if (!confirm("Do you want to update?")) return;
         try {
             const link = isApproved ? `/api/approved/${_id}` : `/api/transcription/${_id}`
-            console.log("yes link has been hit", link)
-            //TODO: don't need the initialTranscript for versioning if transcript is not approved
+
             const data = {
                 title: updatedTitle,
                 markdown,
@@ -92,7 +91,7 @@ export default function EditPage({
                 {isEditing ? "Go to Reading mode" : "Go to Edit mode"}
             </button>
 
-            {/*checking the mode edit or reading mode*/}
+            {/*checking if the mode is edit or reading */}
             {isEditing ? (
                 <form onSubmit={handleSave}>
                     <div className="m-4">

@@ -1,4 +1,4 @@
-import mongoose, { model, models, Schema } from "mongoose";
+import  { model, models, Schema } from "mongoose";
 import { TranscriptSchema } from "../transcription/transcriptions.model";
 
 export const ApprovedTranscriptSchema = new Schema(

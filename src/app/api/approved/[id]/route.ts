@@ -9,6 +9,7 @@ import { Version } from "@/modules/versions/version.model";
 import { VersionController } from "@/modules/versions/version.controller";
 import { TVersion } from "@/modules/versions/version.interface";
 import { ApprovedTranscriptSchema } from "@/modules/approvedTranscript/approved.model";
+import { getToken } from "next-auth/jwt";
 
 export async function GET(
   req: NextRequest,
@@ -43,20 +44,27 @@ export async function PATCH(
 ) {
   const { id } = await params;
   await connectDB();
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req, secret });
+  if (!token) {
+      return NextResponse.json({
+          success: false,
+          message: "Credentials not found!",
+      },{status: 404})
+  }
   try {
     const { data } = await req.json();
     if (data.status !== "approved") throw new Error("Status not approved");
-
     // this way to do transactions sucks
     // TODO: I don't need to put everything in the versions
-    // TODO: add user info who updated it
     const mongooseSession = await mongoose.startSession();
     try {
       mongooseSession.startTransaction();
       const initial = await ApprovedController.getAnApproved(id);
       const oldVersion: Partial<TVersion> = {
-          originId: new mongoose.Types.ObjectId(id),
-          doc: initial,
+        originId: new mongoose.Types.ObjectId(id),
+        doc: initial,
+        updatedBy: new mongoose.Types.ObjectId(token?._id),
       };
       const result = await ApprovedController.updateApprovedDoc(
         id,

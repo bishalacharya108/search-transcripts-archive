@@ -20,6 +20,7 @@ const getAnApprovedFromDB = async (id: string) => {
 };
 
 //TODO: give effective types
+// session is added for the transaction
 const updateApprovedDocFromDB = async (id: string, data, option?: {session?: ClientSession}) => {
   try {
     const result = await ApprovedTranscript.findOneAndUpdate(
