@@ -58,10 +58,9 @@ export default function EditPage({
                 videoUrl,
                 status
             }
-            console.log("this is from client",data)
+            //TODO: do not send the intial one, instead fetch in the backend 
             const response = await axios.patch(link, {
-                data,
-                initialTranscript
+                data
             });
 
             if (response.status === 200) {

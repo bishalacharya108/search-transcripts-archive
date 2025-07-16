@@ -1,6 +1,5 @@
 import mongoose, { model, models, Schema } from "mongoose";
 import { TranscriptSchema } from "../transcription/transcriptions.model";
-import { TApprovedTranscript } from "./approved.interface";
 
 export const ApprovedTranscriptSchema = new Schema(
   {
