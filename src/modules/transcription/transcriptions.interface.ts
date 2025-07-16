@@ -4,7 +4,6 @@ export type TTranscript = {
   title: string;
   markdown: string;
   videoUrl?: string;
-  speaker?: string;
   status: 'pending' | 'approved';
 };
 

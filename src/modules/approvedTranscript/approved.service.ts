@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ClientSession } from "mongoose";
 import { ApprovedTranscript } from "./approved.model";
 
 const getAllApprovedFromDB = async () => {
@@ -19,11 +19,13 @@ const getAnApprovedFromDB = async (id: string) => {
   }
 };
 
-const updateApprovedDocFromDB = async (id, data) => {
+//TODO: give effective types
+const updateApprovedDocFromDB = async (id: string, data, option?: {session?: ClientSession}) => {
   try {
     const result = await ApprovedTranscript.findOneAndUpdate(
       new mongoose.Types.ObjectId(id),
       data,
+      option?.session
     );
     return result;
   } catch (error) {

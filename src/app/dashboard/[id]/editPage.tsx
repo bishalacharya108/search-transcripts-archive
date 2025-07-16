@@ -61,7 +61,6 @@ export default function EditPage({
             console.log("this is from client",data)
             const response = await axios.patch(link, {
                 data,
-
                 initialTranscript
             });
 

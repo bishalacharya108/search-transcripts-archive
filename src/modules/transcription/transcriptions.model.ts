@@ -28,13 +28,6 @@ export const TranscriptSchema = new Schema<TTranscript>(
       enum: ["pending", "approved"],
       default: "pending",
     },
-    // uploadedAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    // lastUpdatedAt: {
-    //   type: Date,
-    // },
   },
   { timestamps: true },
 );

@@ -1,3 +1,4 @@
+import { ClientSession } from "mongoose";
 import { ApprovedTranscript } from "./approved.model";
 import { ApprovedTranscriptService } from "./approved.service";
 
@@ -19,13 +20,14 @@ const getAnApproved = async (id: string) => {
 };
 const updateApprovedDoc = async (
   id: string,
-  data: Partial<typeof ApprovedTranscript.prototype>
+  data: Partial<typeof ApprovedTranscript.prototype>,
+  options?: {session?: ClientSession}
 ) => {
   try {
-    const result = await ApprovedTranscriptService.updateApprovedDocFromDB(id, data);
+    const result = await ApprovedTranscriptService.updateApprovedDocFromDB(id, data, options);
     return result;
   } catch (error) {}
-  throw new Error(error || "Error Updating Approved Docs");
+  throw new Error(error?.message || "Error Updating Approved Docs");
 };
 
 export const ApprovedController = {
