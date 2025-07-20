@@ -100,7 +100,6 @@ export async function PATCH(
         });
         //TODO: should validations first before insert perhaps using some middleware
         await approvedDoc.save({ session: mongooseSession });
-        console.log(approvedDoc)
         await Transcript.findByIdAndDelete(id).session(mongooseSession);
         await mongooseSession.commitTransaction();
       } catch (error) {

@@ -2,9 +2,9 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/options";
 import DashboardCard from "@/components/DashboardCard";
 import { TTranscript } from "@/modules/transcription/transcriptions.interface";
-import { Transcript } from "@/modules/transcription/transcriptions.model";
 
 export default async function AdminPanel() {
+
     const session = await getServerSession(authOptions);
     if (!session) {
         return null;
@@ -20,6 +20,7 @@ export default async function AdminPanel() {
     );
     return (
         <div>
+            <p>These docs are yet to be approved</p>
             {
                 sortedTranscripts.map((transcript) =>
                     <DashboardCard key={transcript._id} transcript={transcript}>

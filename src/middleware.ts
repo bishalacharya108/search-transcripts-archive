@@ -7,7 +7,7 @@ export default withAuth(
     const token = await getToken({ req });
     const { pathname } = req.nextUrl;
     console.log("Middleware pathname hit: ", pathname);
-    // Redirect logged-in users away from auth pages
+    // Redirect logged-in users away from auth pages to the home page
     if (token && (pathname === "/signin" || pathname === "/register")) {
       const url = req.nextUrl.clone();
       url.pathname = "/"; // or "/dashboard"

@@ -5,10 +5,8 @@ import { ApprovedController } from "@/modules/approvedTranscript/approved.contro
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import mongoose from "mongoose";
-import { Version } from "@/modules/versions/version.model";
 import { VersionController } from "@/modules/versions/version.controller";
 import { TVersion } from "@/modules/versions/version.interface";
-import { ApprovedTranscriptSchema } from "@/modules/approvedTranscript/approved.model";
 import { getToken } from "next-auth/jwt";
 
 export async function GET(

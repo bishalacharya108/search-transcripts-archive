@@ -45,7 +45,6 @@ const TranscriptionPage: NextPage = () => {
             setTitle("");
             setMarkdown("");
             setVideoUrl("");
-
             alert("Transcription created successfully for review!");
         } catch (error) {
             if (axios.isAxiosError(error)) {

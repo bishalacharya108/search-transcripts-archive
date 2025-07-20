@@ -1,11 +1,9 @@
-import { authOptions } from "./../auth/[...nextauth]/options";
 import { TranscriptValidationSchema } from "./../../../modules/transcription/transcriptions.validation";
 import { NextRequest, NextResponse } from "next/server";
 
 import connectDB from "@/config/db";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { revalidatePath } from "next/cache";
-import { getToken } from "next-auth/jwt";
 
 export async function POST(req: NextRequest) {
   //  we should probably check the role of the user here, because admins and verified users can upload only
