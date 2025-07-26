@@ -6,7 +6,7 @@ import { TranscriptControllers } from "@/modules/transcription/transcriptions.co
 import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
-  //  we should probably check the role of the user here, because admins and verified users can upload only
+  // TODO: we should probably check the role of the user here, because admins and verified users can upload only
   // if (!session) {
   //   return NextResponse.json(
   //     {

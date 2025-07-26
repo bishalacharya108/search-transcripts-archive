@@ -72,7 +72,6 @@ export default function EditPage({
         }
     };
 
-
     // for handling status dropdown changes 
     const handleSelect = (option: string) => {
         setStatus(option);
@@ -91,7 +90,7 @@ export default function EditPage({
                 {isEditing ? "Go to Reading mode" : "Go to Edit mode"}
             </button>
 
-            {/*checking if the mode is edit or reading */}
+            {/*checking if its in edit or reading mode*/}
             {isEditing ? (
                 <form onSubmit={handleSave}>
                     <div className="m-4">

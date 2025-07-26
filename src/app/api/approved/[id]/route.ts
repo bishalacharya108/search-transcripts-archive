@@ -54,6 +54,7 @@ export async function PATCH(
     const { data } = await req.json();
     if (data.status !== "approved") throw new Error("Status not approved");
     // this way to do transactions sucks
+    // and probably doesn't work
     // TODO: I don't need to put everything in the versions
     const mongooseSession = await mongoose.startSession();
     try {

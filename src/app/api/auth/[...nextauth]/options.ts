@@ -47,7 +47,6 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Invalid credentials");
           }
 
-          // 🔧 CLEAN RETURN: only return what's needed (recommended)
           return {
             _id: user._id.toString(),
             userName: user.userName,

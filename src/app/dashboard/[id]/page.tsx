@@ -11,11 +11,15 @@ export default async function Expand({ params, searchParams }) {
     // checking if the doc is an approved transcript or not
     const { approved } = await searchParams
     const isApproved = approved === 'true';
-    const response = isApproved ? await fetch(`http://localhost:3000/api/approved/${id}`, { next: { revalidate: 60 } })
-        
-        : await fetch(`http://localhost:3000/api/transcription/${id}`, { next: { revalidate: 60 } });
-    const { data: transcript }: { data: TTranscript } = await response.json();
+    try {
+        const response = isApproved ? await fetch(`http://localhost:3000/api/approved/${id}`, { next: { revalidate: 60 } })
 
+            : await fetch(`http://localhost:3000/api/transcription/${id}`, { next: { revalidate: 60 } });
+        const { data: transcript }: { data: TTranscript } = await response.json();
+
+    } catch (error: any) {
+        throw new Error(error.message || "Error occurred while retrieving transcripts")
+    }
     const readableDate = new Date(transcript.createdAt).toLocaleString();
     const markdownText = transcript?.markdown;
     const processedContent = await remark()
@@ -44,7 +48,7 @@ export default async function Expand({ params, searchParams }) {
                             Upload Date: {readableDate}
                         </p>}
                         {/*this edit component will toggle between reading to edit mode*/}
-                        <EditPage isApproved = {isApproved} transcript={transcript} convertedUrl={convertedUrl} markdownHtml={markdownHtml}></EditPage>
+                        <EditPage isApproved={isApproved} transcript={transcript} convertedUrl={convertedUrl} markdownHtml={markdownHtml}></EditPage>
                     </div>
                 </div>
             }
