@@ -11,14 +11,17 @@ export default async function Expand({ params, searchParams }) {
     // checking if the doc is an approved transcript or not
     const { approved } = await searchParams
     const isApproved = approved === 'true';
+    let transcript: TTranscript;
+
     try {
-        const response = isApproved ? await fetch(`http://localhost:3000/api/approved/${id}`, { next: { revalidate: 60 } })
-
+        const response = isApproved
+            ? await fetch(`http://localhost:3000/api/approved/${id}`, { next: { revalidate: 60 } })
             : await fetch(`http://localhost:3000/api/transcription/${id}`, { next: { revalidate: 60 } });
-        const { data: transcript }: { data: TTranscript } = await response.json();
 
+        const json = await response.json();
+        transcript = json.data;
     } catch (error: any) {
-        throw new Error(error.message || "Error occurred while retrieving transcripts")
+        throw new Error(error.message || "Error occurred while retrieving transcripts");
     }
     const readableDate = new Date(transcript.createdAt).toLocaleString();
     const markdownText = transcript?.markdown;
