@@ -57,6 +57,7 @@ export default function EditPage({
                 videoUrl,
                 status
             }
+            console.log(data);
             //TODO: do not send the intial one, instead fetch in the backend 
             const response = await axios.patch(link, {
                 data
@@ -68,6 +69,7 @@ export default function EditPage({
                 router.refresh(); // Trigger SSR update if needed, not sure if this will work
             }
         } catch (error) {
+            throw new Error("Error updating");
             console.error("Error updating:", error);
         }
     };

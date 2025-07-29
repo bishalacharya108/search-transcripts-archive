@@ -41,31 +41,38 @@ export async function PATCH(
   { params }: { params: { id: string } },
 ) {
   const { id } = await params;
-  await connectDB();
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
-  if (!token) {
-      return NextResponse.json({
-          success: false,
-          message: "Credentials not found!",
-      },{status: 404})
+  if (!token || !token._id) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 },
+    );
   }
+  await connectDB();
   try {
     const { data } = await req.json();
-    if (data.status !== "approved") throw new Error("Status not approved");
+    if (data.status !== "approved") {
+      return NextResponse.json(
+        { success: false, message: "Status must be 'approved'" },
+        { status: 400 }
+      );
+    }
     // this way to do transactions sucks
-    // and probably doesn't work
+    // probably doesn't work
     // TODO: I don't need to put everything in the versions
     const mongooseSession = await mongoose.startSession();
+    let result;
     try {
       mongooseSession.startTransaction();
       const initial = await ApprovedController.getAnApproved(id);
+      if(!initial) throw new Error("Document not found");
       const oldVersion: Partial<TVersion> = {
         originId: new mongoose.Types.ObjectId(id),
         doc: initial,
         updatedBy: new mongoose.Types.ObjectId(token?._id),
       };
-      const result = await ApprovedController.updateApprovedDoc(
+      result = await ApprovedController.updateApprovedDoc(
         id,
         {
           $set: data,
@@ -75,17 +82,20 @@ export async function PATCH(
           session: mongooseSession,
         },
       );
+      if(!result) throw new Error("Error updating document");
       const version = await VersionController.createAVersion(oldVersion, {
         session: mongooseSession,
       });
       await mongooseSession.commitTransaction();
 
-      if (!result || !version) {
-        throw new Error("Operation validation failed");
+      if (!version) {
+        throw new Error("Failed to version the document");
       }
     } catch (error) {
-      mongooseSession.abortTransaction();
+      await mongooseSession.abortTransaction();
       throw new Error("Error updating approved transcripts");
+    }finally{
+        await mongooseSession.endSession();
     }
 
     revalidatePath("/dashboard");

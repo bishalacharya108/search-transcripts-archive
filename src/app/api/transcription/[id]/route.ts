@@ -73,7 +73,6 @@ export async function PATCH(
     //TODO: only update the original if it is not approved
     // NOTE: this update does take into account the recent approved doc page update system
     const updated = await TranscriptControllers.updateATranscript(id,body.data);
-    console.log("here is the updated", updated)
     if (!updated) {
       return NextResponse.json(
         { success: false, message: "Transcript not found or update failed" },

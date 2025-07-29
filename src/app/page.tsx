@@ -14,6 +14,7 @@ export default async function Home() {
     } catch (error) {
         throw new Error("Error occurred while getting approved transcripts");
     }
+    //TODO: sorting not working properly. it might have something to do with createdAt option. need to check it out
     const sortedTranscripts = [...transcripts].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
