@@ -1,9 +1,8 @@
 "use client";
 import AuthForm from "@/components/AuthForm";
-import { auth } from "@/auth";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { Suspense, useState } from "react";
+import { signIn} from "next-auth/react";
 import Loading from "@/components/Loading";
 // import { revalidatePath } from "next/cache";
 

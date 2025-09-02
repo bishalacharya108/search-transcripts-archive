@@ -12,13 +12,17 @@ export const ApprovedTranscriptSchema = new Schema(
 );
 
 
-ApprovedTranscriptSchema.index(
-  { markdown: "text", title: "text" },
-  { 
-    weights: { title: 10, markdown: 3 },
-    name: "searchIndex"
-  }
-);
+// Don't need this if we are manually creating search indexes for better fuzzy search
+// ApprovedTranscriptSchema.index(
+//   { markdown: "text", title: "text" },
+//   { 
+//     weights: { title: 1, markdown: 3 },
+//     name: "searchIndex"
+//   }
+// );
+
+
+
 // if (mongoose.models.ApprovedTranscript) {
 //   delete mongoose.models.ApprovedTranscript;
 // }

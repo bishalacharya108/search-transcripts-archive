@@ -15,6 +15,7 @@ export async function GET(
 ) {
   const { id } = await params;
   await connectDB();
+
   try {
     const result = await ApprovedController.getAnApproved(id);
     return NextResponse.json(
@@ -58,6 +59,7 @@ export async function PATCH(
         { status: 400 }
       );
     }
+    //TODO: Make versioning a middleware
     // this way to do transactions sucks
     // probably doesn't work
     // TODO: I don't need to put everything in the versions
@@ -89,7 +91,7 @@ export async function PATCH(
       await mongooseSession.commitTransaction();
 
       if (!version) {
-        throw new Error("Failed to version the document");
+        throw new Error("Failed to save old version of the document");
       }
     } catch (error) {
       await mongooseSession.abortTransaction();
