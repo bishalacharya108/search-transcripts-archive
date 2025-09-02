@@ -57,7 +57,7 @@ export async function PATCH(
   { params }: { params: { id: string } },
 ) {
   const { id } = await params;
-  //  we should probably check the role of the user here, because only admins and verified users can upload
+  // TODO: we should probably check the role of the user here, because only admins and verified users can upload
   await connectDB();
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
