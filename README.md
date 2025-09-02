@@ -68,4 +68,16 @@
 ## Api Routes:
 - transcription- http://localhost:3000/api/transcription
 
+
+## Atlas Search Index:
+-{
+  mappings: {
+    dynamic: false,
+    fields: {
+      title: { type: "string" },
+      markdown: { type: "string" },
+    },
+  },
+}
+
 ## (focusing on the backend rn)
