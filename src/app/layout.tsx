@@ -17,9 +17,14 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className="mx-auto px-4 max-w-7xl min">
-                <NavbarServer></NavbarServer>
-                {children}
+                className="mx-auto px-4 max-w-7xl min items-center align-middle">
+                <div className="flex justify-center">
+
+                <NavbarServer ></NavbarServer>
+                </div>
+                <main className="pt-20">
+                    {children}
+                </main>
             </body>
         </html>
     );

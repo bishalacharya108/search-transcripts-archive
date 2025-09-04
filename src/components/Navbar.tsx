@@ -8,12 +8,13 @@ import Loading from "./Loading";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import axios from "axios";
+import { getServerSession } from "next-auth";
 export default function Navbar({ session }: { session: any }) {
-    // const { data: session, status } = useSession(); // Get session data and status
+    // const { data: session2, status } = useSession(); // Get session data and status
+    // console.log("Session", session2);
     const [searchValue, setSearchValue] = useState();
     const handleSearchInput = (e) => {
         setSearchValue(e.target.value)
-
     }
     const handleSearchSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -62,7 +63,7 @@ export default function Navbar({ session }: { session: any }) {
         </>
     );
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-100 shadow-sm fixed z-10 w-5xl">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -107,7 +108,7 @@ export default function Navbar({ session }: { session: any }) {
                                 <path d="m21 21-4.3-4.3"></path>
                             </g>
                         </svg>
-                        <input type="search" value={searchValue} onChange={handleSearchInput} required placeholder="Search Word" />
+                        <input type="search" className="w-auto" value={searchValue} onChange={handleSearchInput} required placeholder="Search Word" />
                     </label>
                     <button onClick={handleSearchSubmit} className="btn btn-outline">Search</button>
                 </div>

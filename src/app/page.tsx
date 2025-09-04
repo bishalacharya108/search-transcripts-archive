@@ -20,7 +20,7 @@ export default async function Home() {
     );
     return (
         <div className="align-center">
-            <p className="text-center">
+            <p className="text-center ">
                 Welcome to homepage
             </p>
             {/*home page only shows approved transcripts*/}
