@@ -1,3 +1,4 @@
+// TODO: I should reduce api routing fetching and use server actions more (at least for cud)
 import { TranscriptValidationSchema } from "./../../../modules/transcription/transcriptions.validation";
 import { NextRequest, NextResponse } from "next/server";
 

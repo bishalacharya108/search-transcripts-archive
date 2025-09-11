@@ -1,3 +1,4 @@
+// TODO: proper verification implementation is needed
 import { User } from "./../../../../modules/users/user.model";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
