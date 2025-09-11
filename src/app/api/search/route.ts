@@ -1,21 +1,32 @@
+import connectDB from "@/config/db";
 import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model";
 import { NextRequest, NextResponse } from "next/server";
 
-// Need to add this into the into the search indexes of mongodb settings,
-// otherwise the search functionality won't work with aggrigate
-const searchIndexObject = {
+const indexDef = {
   mappings: {
     dynamic: false,
     fields: {
-      title: { type: "string" },
-      markdown: { type: "string" },
+      title: {
+        type: "autocomplete",
+        tokenization: "edgeGram",
+        minGrams: 3,
+        maxGrams: 7,
+      },
+      markdown: {
+        type: "autocomplete",
+        tokenization: "edgeGram",
+        minGrams: 2,
+        maxGrams: 15,
+      },
     },
   },
 };
 
 export async function GET(req: NextRequest) {
+  connectDB();
   const { searchParams } = new URL(req.url);
   const searchValue = searchParams.get("searchValue");
+  console.log("Hit:", searchValue);
 
   //pagination
   const page = searchParams.get("page") ?? "1";
@@ -24,13 +35,14 @@ export async function GET(req: NextRequest) {
   const end = start + Number(perPage);
 
   if (!searchValue) {
+    // TODO: do a better error handling
     return NextResponse.json({
       success: false,
       message: "No search params",
     });
   }
   try {
-    //basic searching
+    //basic text searching
     // const results = await ApprovedTranscript.find(
     //   { $text: { $search: searchValue } },
     //   { score: { $meta: "textScore" } },
@@ -38,27 +50,43 @@ export async function GET(req: NextRequest) {
     //   .sort({ score: { $meta: "textScore" } })
     //   .limit(50);
 
-    //NOTE: to use create a search index in mongodb atlas with the object given above
+    // manually add the required json into search index of mongodb to use this
     const results = await ApprovedTranscript.aggregate([
       {
         $search: {
-          index: "default",
-          text: {
-            query: searchValue,
+          compound: {
+            should: [
+              {
+                autocomplete: {
+                  query: searchValue,
+                  path: "title",
+                  fuzzy: { maxEdits: 1, prefixLength: 2 },
+                },
+              },
+              {
+                autocomplete: {
+                  query: searchValue,
+                  path: "markdown",
+                  fuzzy: { maxEdits: 1, prefixLength: 2 },
+                },
+              },
+            ],
+          },
+          highlight: {
             path: ["markdown", "title"],
-            fuzzy: { maxEdits: 1, prefixLength: 1 },
           },
         },
       },
+      { $limit: 10 },
       {
-        $addFields: { score: { $meta: "searchScore" } },
-      },
-      { $sort: { score: -1 } },
-      {
-        $limit: 50,
+        $project: {
+          title: 1,
+          markdown: 1,
+          highlights: { $meta: "searchHighlights" },
+        },
       },
     ]);
-
+    console.log("Results count:", results.length);
     const data = results.slice(start, end);
     return NextResponse.json(
       {
