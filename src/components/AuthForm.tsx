@@ -6,7 +6,6 @@ type AuthFormProps = {
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     showName?: boolean; // true for register, expecting false by default
     errorMessage: string;
-
 };
 
 

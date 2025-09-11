@@ -13,7 +13,7 @@ export const LogoutButton = () => {
             // Using NextAuth.js to sign out
             await signOut({
                 redirect: true,
-                callbackUrl: "/signin",
+                callbackUrl: "/",
             }); // Redirect to the sign-in page after logout
 
             // Show toast on successful logout

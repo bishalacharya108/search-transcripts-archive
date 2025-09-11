@@ -2,11 +2,11 @@
 import AuthForm from "@/components/AuthForm";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
-import { signIn} from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Loading from "@/components/Loading";
-// import { revalidatePath } from "next/cache";
 
 
+// TODO: sign in should redirect to the page the user was wanting to navigate to
 export default function SigninPage() {
     const router = useRouter();
 
@@ -24,21 +24,19 @@ export default function SigninPage() {
         // using next auth signin function
         try {
             const res = await signIn("credentials", {
-                redirect: false,
+                redirect: true,
+                callbackUrl: "/",
                 email,
                 password,
             });
-
-            if (!res) {
-                setErrorMessage("No response from authentication server.");
-            } else if (res.error) {
+            if (res?.error) {
                 setErrorMessage(res.error);
             } else {
                 setShowToast(true);
                 // revalidatePath("/");
                 setTimeout(() =>
                     // Revalidate the path to ensure the session is up to date
-                    router.push("/"), 1000);
+                    router.push("/"), 500);
             }
         } catch (error: any) {
             const message =

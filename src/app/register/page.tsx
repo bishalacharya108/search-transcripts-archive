@@ -9,7 +9,6 @@ export default function RegisterPage() {
     const [errorMessage, setErrorMessage] = useState("");
     const [showToast, setShowToast] = useState(false);
 
-    // function to handle submit
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = new FormData(e.currentTarget);
@@ -18,14 +17,14 @@ export default function RegisterPage() {
         const password = form.get("password");
         setErrorMessage("");
         try {
-            const response = await axios.post("/api/users/signup", {
+            await axios.post("/api/users/signup", {
                 email,
                 userName,
                 password,
             });
 
+            setShowToast(true);
             setTimeout(() => {
-                setShowToast(true);
                 router.push("/signin");
             }, 2000);
         } catch (error: any) {

@@ -1,34 +1,13 @@
-"use client";
-
 import Link from "next/link";
 import { LogoutButton } from "./LogoutBtn";
-import { useSession } from "next-auth/react";
-import { Suspense, useState } from "react";
+import { Suspense  } from "react";
 import Loading from "./Loading";
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import axios from "axios";
 import { getServerSession } from "next-auth";
-export default function Navbar({ session }: { session: any }) {
-    // const { data: session2, status } = useSession(); // Get session data and status
-    // console.log("Session", session2);
-    const [searchValue, setSearchValue] = useState();
-    const handleSearchInput = (e) => {
-        setSearchValue(e.target.value)
-    }
-    const handleSearchSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        try {
-            const response = await axios.get("http://localhost:3000/api/search/", {
-                params: {
-                    searchValue
-                }
-            });
-            console.log(response)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+
+export default async function Navbar() {
+
+    const session = await getServerSession(authOptions)
     const links = (
         <>
             <li>
@@ -59,6 +38,9 @@ export default function Navbar({ session }: { session: any }) {
             </li>
             <li>
                 <Link href="/admin">Admin Panel</Link>
+            </li>
+            <li>
+                <Link href="/search">Search</Link>
             </li>
         </>
     );
@@ -94,24 +76,6 @@ export default function Navbar({ session }: { session: any }) {
                     ISDS
                 </Link>
 
-                <div className="flex">
-                    <label className="input">
-                        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <g
-                                strokeLinejoin="round"
-                                strokeLinecap="round"
-                                strokeWidth="2.5"
-                                fill="none"
-                                stroke="currentColor"
-                            >
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.3-4.3"></path>
-                            </g>
-                        </svg>
-                        <input type="search" className="w-auto" value={searchValue} onChange={handleSearchInput} required placeholder="Search Word" />
-                    </label>
-                    <button onClick={handleSearchSubmit} className="btn btn-outline">Search</button>
-                </div>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">{links}</ul>

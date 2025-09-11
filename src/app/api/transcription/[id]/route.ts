@@ -16,7 +16,7 @@ export async function GET(
 ) {
   const { id } = await params;
   await connectDB();
-  const session = getServerSession();
+  const session = await getServerSession();
   try {
     // getting the transcript through services... here I realised I can directly call the service methods instead of controllers
     const data = await TranscriptServices.getATranscriptionFromDB(id);
