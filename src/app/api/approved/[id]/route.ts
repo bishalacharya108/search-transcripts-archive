@@ -1,5 +1,5 @@
 //this is for approved transcription page api
-//TODO: very bad code here, need of upgrade
+//TODO: very bad code here, need to upgrade
 import connectDB from "@/config/db";
 import { ApprovedController } from "@/modules/approvedTranscript/approved.controllers";
 import { NextRequest, NextResponse } from "next/server";
@@ -56,10 +56,10 @@ export async function PATCH(
     if (data.status !== "approved") {
       return NextResponse.json(
         { success: false, message: "Status must be 'approved'" },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    //TODO: Make versioning a middleware
+    //TODO: Turn versioning into a middleware
     // this way to do transactions sucks
     // probably doesn't work
     // TODO: I don't need to put everything in the versions
@@ -68,7 +68,7 @@ export async function PATCH(
     try {
       mongooseSession.startTransaction();
       const initial = await ApprovedController.getAnApproved(id);
-      if(!initial) throw new Error("Document not found");
+      if (!initial) throw new Error("Document not found");
       const oldVersion: Partial<TVersion> = {
         originId: new mongoose.Types.ObjectId(id),
         doc: initial,
@@ -84,7 +84,7 @@ export async function PATCH(
           session: mongooseSession,
         },
       );
-      if(!result) throw new Error("Error updating document");
+      if (!result) throw new Error("Error updating document");
       const version = await VersionController.createAVersion(oldVersion, {
         session: mongooseSession,
       });
@@ -96,8 +96,8 @@ export async function PATCH(
     } catch (error) {
       await mongooseSession.abortTransaction();
       throw new Error("Error updating approved transcripts");
-    }finally{
-        await mongooseSession.endSession();
+    } finally {
+      await mongooseSession.endSession();
     }
 
     revalidatePath("/dashboard");
