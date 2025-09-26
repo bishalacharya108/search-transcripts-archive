@@ -18,6 +18,8 @@ export const TranscriptSchema = new Schema<TTranscript>(
     },
     videoUrl: {
       type: String,
+      unique: true,
+      required: true,
       validate: {
         validator: (v: string) => {
           //TODO: need to add for the other platforms also
@@ -28,7 +30,7 @@ export const TranscriptSchema = new Schema<TTranscript>(
     },
     status: {
       type: String,
-      enum: ["pending", "approved"],
+      enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
   },

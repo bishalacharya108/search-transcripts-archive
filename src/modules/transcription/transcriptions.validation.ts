@@ -11,13 +11,13 @@ export const TranscriptValidationSchema = z.object({
 
   markdown: z.string()
     
-    .max(50000, "Content too long (max 50,000 characters)"),//arbitarily selected 50,000
+    .max(80000, "Content too long (max 80,000 characters)"),
 
   videoUrl: z.string()
     .url("Invalid URL format")
     .regex(youtubeRegex, "Must be a YouTube URL")
     .optional(),
-  status: z.enum(["pending", "approved"])
+  status: z.enum(["pending", "approved", "rejected"])
     .default("pending"),
 
 

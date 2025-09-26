@@ -4,7 +4,7 @@ export type TTranscript = {
   title: string;
   markdown: string;
   videoUrl?: string;
-  status: 'pending' | 'approved';
+  status: 'pending' | 'approved' | "rejected";
 };
 
 // For mongoose
