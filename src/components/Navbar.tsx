@@ -1,49 +1,15 @@
 import Link from "next/link";
 import { LogoutButton } from "./LogoutBtn";
-import { Suspense  } from "react";
+import { Suspense } from "react";
 import Loading from "./Loading";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import Image from "next/image";
+import Navlinks from "./Navlinks";
 
 export default async function Navbar() {
 
     const session = await getServerSession(authOptions)
-    const links = (
-        <>
-            <li>
-                <Link href={"/"}>Home</Link>
-            </li>
-            <li>
-                <Link href={"/add"}>Add Transcripts</Link>
-            </li>
-            {/* next auth based links */}
-            <Suspense fallback={<Loading />}>
-                {
-                    // status === "unauthenticated" && (
-                    !session && (
-                        <>
-                            <li>
-                                <Link href="/signin">Signin</Link>
-                            </li>
-                            <li>
-                                <Link href="/register">Register</Link>
-                            </li>
-                        </>
-                    )
-                }
-            </Suspense>
-
-            <li>
-                <Link href={"/about"}>About</Link>
-            </li>
-            <li>
-                <Link href="/admin">Admin Panel</Link>
-            </li>
-            <li>
-                <Link href="/search">Search</Link>
-            </li>
-        </>
-    );
     return (
         <div className="navbar bg-base-100 shadow-sm fixed z-10 w-5xl">
             <div className="navbar-start">
@@ -69,16 +35,20 @@ export default async function Navbar() {
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
-                        {links}
+                    <Navlinks session={session}></Navlinks>
                     </ul>
+
                 </div>
-                <Link href={"/"} className="btn btn-ghost text-xl">
-                    ISDS
+                <Link href={"/"} className="text-xl">
+                    <Image src={"/Logo.png"} alt="DharmaNation"
+                        width={300}
+                        height={300}
+                        priority  ></Image>
                 </Link>
 
             </div>
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">{links}</ul>
+                <ul className="menu menu-horizontal px-1"><Navlinks session={session}></Navlinks></ul>
             </div>
             <Suspense fallback={<Loading />}>
                 {
