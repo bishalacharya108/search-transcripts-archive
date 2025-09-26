@@ -60,12 +60,13 @@ const TranscriptionPage: NextPage = () => {
     };
 
     return (
-        <div className="p-4 shadow-md rounded-lg mb-4 mx-5">
-            <h1 className="text-2xl font-bold mb-4">Submit your Transcription</h1>
+        <div className="p-4 shadow-md rounded-lg mb-4 mx-5 bg-white">
+            <h1 className="text-2xl font-bold mb-4">Upload your Transcription</h1>
 
             {error && <div className="text-red-500 mb-4">{error}</div>}
 
-            <form onSubmit={handleSubmit}>
+            <form  onSubmit={handleSubmit}>
+             
                 {/* title section */}
                 <div className="mb-4">
                     <label
@@ -124,7 +125,7 @@ const TranscriptionPage: NextPage = () => {
                 </div>
 
                 <div className="flex">
-                    <Link href={"/"} className="btn btn-ghost">
+                    <Link href={"/"}>
                         <button
                             type="submit"
                             className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-warning
@@ -140,7 +141,7 @@ const TranscriptionPage: NextPage = () => {
                         className={`w-40 btn py-2 px-4 btn-info ml-5 text-white rounded-md shadow-md ${loading ? "opacity-50" : "hover:btn-accent"
                             }`}
                     >
-                        {loading ? "Submitting..." : "Submit"}
+                        {loading ? "Uploading..." : "Upload"}
                     </button>
                 </div>
             </form>
