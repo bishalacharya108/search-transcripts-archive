@@ -8,6 +8,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.bg-bannerImg {
+  background-image: url("/image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 90vw;
+  height: 90vh;
+  display: grid;
+  background-position: center;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 4cm;
+  right: 2cm;
+  z-index: -10
+}
 .prose h1 {
   @apply text-3xl font-bold text-primary;
 }
@@ -15,8 +30,8 @@ body {
   @apply text-blue-600 underline;
 }
 /* global.css or Tailwind config */
-.prose pre, .prose code {
+.prose pre,
+.prose code {
   word-break: break-word;
   white-space: pre-wrap;
 }
-

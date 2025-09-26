@@ -3,25 +3,30 @@ import { useState } from "react";
 import axios from "axios";
 import DashboardCard from "@/components/DashboardCard";
 export default function SearchComponent() {
-    const [searchValue, setSearchValue] = useState();
-    const [results, setResults] = useState();
+    const [searchValue, setSearchValue] = useState("");
+    const [results, setResults] = useState<any[]>([]);
     const handleSearchInput = (e) => {
         setSearchValue(e.target.value)
     }
-    const handleSearchSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.get("http://localhost:3000/api/search/", {
-                params: {
-                    searchValue
-                }
+            // const response = await axios.get("http://localhost:3000/api/search", {
+            //     params: {
+            //         searchValue
+            //     }
+            // });
+            const response = await axios.get("/api/search", {
+                params: { searchValue }
             });
+            //TODO: manage if no results are found
+
             setResults(response.data.data);
             console.log(response.data.data[0].highlights)
 
         } catch (error) {
             console.log(error)
-            throw new Error("Error fetching search params");
+            // throw new Error("Error fetching search params");
         }
     }
     return (
@@ -34,7 +39,7 @@ export default function SearchComponent() {
                     </svg>
                     <input
                         type="search"
-                        className="flex-1 outline-none mx-auto"
+                        className="flex-1 outline-none mx-auto border-white"
                         value={searchValue}
                         onChange={handleSearchInput}
                         placeholder="Search transcripts..."
@@ -45,9 +50,14 @@ export default function SearchComponent() {
                     Search
                 </button>
             </form>
-            {
-                results ? results.map((item, index: number) => <DashboardCard key={index} transcript={item} approved={true}></DashboardCard>) : <p>Nothing searched yet</p>
-            }
+
+            { results && results?.length > 0 ? (
+                results.map((item, index) => (
+                    <DashboardCard key={index} transcript={item} approved={true} />
+                ))
+            ) : (
+                <p className="text-center">Nothing</p>
+            )}
 
 
         </div>
