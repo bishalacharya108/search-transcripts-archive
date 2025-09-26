@@ -23,20 +23,20 @@ export default async function Expand({ params, searchParams }) {
     } catch (error: any) {
         throw new Error(error.message || "Error occurred while retrieving transcripts");
     }
-    const readableDate = new Date(transcript.createdAt).toLocaleString();
+    const readableDate = new Date(transcript?.createdAt).toLocaleString();
     const markdownText = transcript?.markdown;
     const processedContent = await remark()
         .use(html)
         .process(markdownText);
     const markdownHtml = processedContent.toString();
-    const convertedUrl = getYouTubeEmbedUrl(transcript.videoUrl);
+    const convertedUrl = getYouTubeEmbedUrl(transcript?.videoUrl);
 
     return (
         <div>
             {
                 transcript &&
                 <div className="max-w-7xl mx-auto p-6">
-                    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-8">
+                    <div className="  rounded-xl shadow-md p-8">
                         <div className="mb-3">
                             {/*linking to all transcripts page*/}
                             <Link href={"/admin"}>
