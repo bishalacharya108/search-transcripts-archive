@@ -144,6 +144,7 @@ export default function EditPage({
                                 />
                             </div>
                         )}
+                        {/*TODO: background white somewhat transparent*/}
                         <div className="overflow-x-auto">
                             <article
                                 className="prose prose-lg dark:prose-invert break-words whitespace-pre-wrap"

@@ -34,7 +34,6 @@ const TranscriptionPage: NextPage = () => {
         setError("");
 
         try {
-            // axios operation here
             await axios.post("/api/transcription", {
                 title,
                 markdown,
@@ -126,19 +125,22 @@ const TranscriptionPage: NextPage = () => {
 
                 <div className="flex">
                     <Link href={"/"}>
+                    
+                    {/*TODO: Cancel button should only be active if any of the three inputs have some entry*/}
                         <button
                             type="submit"
-                            className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-warning
+                            className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-error
           `}
                         >
                             Cancel
                         </button>
                     </Link>
 
+                    {/*TODO: Upload button should only be active if all three inputs have some entry*/}
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-40 btn py-2 px-4 btn-info ml-5 text-white rounded-md shadow-md ${loading ? "opacity-50" : "hover:btn-accent"
+                        className={`w-40 btn py-2 px-4 bg-[#F7B24D] btn-info ml-5 text-black rounded-md shadow-md border-none hover:bg-green-500 hover:text-white ${loading ? "opacity-50" : "hover:btn-accent"
                             }`}
                     >
                         {loading ? "Uploading..." : "Upload"}

@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
   const start = (Number(page) - 1) * Number(perPage);
   const end = start + Number(perPage);
 
+  //TODO: Search value should have a limit to string length
   if (!searchValue) {
     // TODO: do a better error handling
     return NextResponse.json({

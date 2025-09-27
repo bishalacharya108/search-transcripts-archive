@@ -8,8 +8,8 @@ const DashboardCard = ({ transcript, approved = false }) => {
 
     return (
         <div>
-            <div className="card w-[50rem] bg-base-100 card-md shadow-lg mx-auto">
-                <div className="card-body">
+            <div className="card w-[50rem] bg-base-100 card-md shadow-lg mx-auto rounded-none">
+                <div className="card-body pt-2 pb-1">
                     <h2 className="card-title">Title: {title}</h2>
                     <p className="line-clamp-4">
                         {markdown.length > 500 ? `${markdown.slice(0, 500)}...` : markdown}

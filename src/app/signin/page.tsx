@@ -48,11 +48,11 @@ export default function SigninPage() {
     };
 
     return (
-        <div className="hero bg-base-200 min-h-screen -mt-20">
+        <div className="hero  min-h-screen -mt-20">
             <AuthForm
                 onSubmit={handleSignin}
                 title="signin"
-                buttonText="signin"
+                buttonText="Login"
                 errorMessage={errorMessage}
             ></AuthForm>
             <Suspense fallback={<Loading />}>
