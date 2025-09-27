@@ -43,7 +43,7 @@ export const LogoutButton = () => {
         <>
             <button
                 onClick={handleLogout}
-                className="btn btn-error text-white hover:btn-warning"
+                className="btn  bg-red-500 text-white hover:btn-warning"
             >
                 Logout
             </button>

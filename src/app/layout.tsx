@@ -8,10 +8,8 @@ export const metadata: Metadata = {
     title: "Search-Transcripts-Archive",
     description: "ISDS Transcription Website",
     icons: {
-        // icon: "/chakra-white.png",
-        // shortcut: "/chakra-white.png",
-        icon: "/image.ico",
-        shortcut: "/image.ico",
+        icon: "/chakra.ico",
+        shortcut: "/chakra.ico",
     },
 };
 
@@ -24,6 +22,7 @@ export default async function RootLayout({
         <html lang="en" data-theme="light" >
             <body
                 className="mx-auto  px-4 max-w-7xl min items-center align-middle">
+                <section className="bg-gradient-to-b from-[#FADD76] to-white fixed inset-0 w-full h-[112vh] z-[-10] bg-no-repeat bg-cover align-middle items-center bg-center "></section>
                 <section className="bg-bannerImg"></section>
                 <div className="flex justify-center">
                     <NavbarServer  ></NavbarServer>
