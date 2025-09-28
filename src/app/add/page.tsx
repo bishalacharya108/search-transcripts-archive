@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NextPage } from "next";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 
 const TranscriptionPage: NextPage = () => {
     const [title, setTitle] = useState<string>("");
@@ -34,6 +35,7 @@ const TranscriptionPage: NextPage = () => {
         setError("");
 
         try {
+            //TODO: handle if it was not uploaded
             await axios.post("/api/transcription", {
                 title,
                 markdown,
@@ -44,7 +46,8 @@ const TranscriptionPage: NextPage = () => {
             setTitle("");
             setMarkdown("");
             setVideoUrl("");
-            alert("Transcription created successfully for review!");
+            document.getElementById('my_modal_5').showModal();
+
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 setError(
@@ -64,8 +67,8 @@ const TranscriptionPage: NextPage = () => {
 
             {error && <div className="text-red-500 mb-4">{error}</div>}
 
-            <form  onSubmit={handleSubmit}>
-             
+            <form onSubmit={handleSubmit}>
+
                 {/* title section */}
                 <div className="mb-4">
                     <label
@@ -125,8 +128,8 @@ const TranscriptionPage: NextPage = () => {
 
                 <div className="flex">
                     <Link href={"/"}>
-                    
-                    {/*TODO: Cancel button should only be active if any of the three inputs have some entry*/}
+
+                        {/*TODO: Cancel button should only be active if any of the three inputs have some entry*/}
                         <button
                             type="submit"
                             className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-error
@@ -147,6 +150,23 @@ const TranscriptionPage: NextPage = () => {
                     </button>
                 </div>
             </form>
+            {/*Modal*/}
+            <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle text-center ">
+                <div className="translate-0 p-2 bg-base-200 w-[40vw] h-[50vh] inset-0 rounded-md">
+                    <div className="flex justify-center py-2">
+                        <Image src={"/checkmark.svg"} alt="checkmark" width={100} height={100} className="content-center"></Image>
+                    </div>
+                    <h3 className="font-normal text-lg py-3">Upload Successful</h3>
+                    <hr className="w-[35vw] text-center mx-auto" />
+                    <p className="py-4 px-6">The transcript will be ready for viewing once approved by an administrator.</p>
+                    <div className="modal-action flex justify-center">
+                        <form method="dialog" >
+                            {/* if there is a button in form, it will close the modal */}
+                            <button className="btn bg-[#F8B447] font-normal shadow-lg">OK</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
         </div>
     );
 };
