@@ -4,6 +4,13 @@ import { User } from "./../../../../modules/users/user.model";
 import connectDB from "@/config/db";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+import { Resend } from "resend";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "@/config/mongodbClientPromise";
+import { NextResponse } from "next/server";
+
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -24,12 +31,14 @@ export const authOptions: NextAuthOptions = {
           if (!credentials?.email || !credentials?.password) {
             throw new Error("Missing email/username or password");
           }
+          console.log(credentials.email, credentials.password)
 
           const user = await User.findOne({
             $or: [{ email: credentials.email }],
           });
 
           if (!user) {
+              // return null;
             throw new Error("User not found");
           }
 
@@ -44,6 +53,7 @@ export const authOptions: NextAuthOptions = {
           );
 
           if (!isPasswordCorrect) {
+              // return null;
             throw new Error("Invalid credentials");
           }
 
@@ -55,15 +65,27 @@ export const authOptions: NextAuthOptions = {
             role: user.role || "user",
           };
         } catch (error: any) {
-          console.error("Authorize error:", error.message); // 🔧 LOG ERROR
+          console.error("Authorize error:", error.message);
           throw new Error(error.message || "Login failed");
         }
       },
     }),
+    // EmailProvider({
+    //   async sendVerificationRequest({ identifier, url }) {
+    //     await resend.emails.send({
+    //       from: "bishal15-6242@diu.edu.bd",
+    //       to: identifier,
+    //       subject: "Verify your email",
+    //       html: `<p>Click <a href="${url}">here</a> to verify and sign in.</p>`,
+    //     });
+    //   },
+    // }),
   ],
   pages: {
     // for now I don't need it
     // if any page is needed to be overrode we will override here
+    signIn: "/signin", 
+    error: "/signin",
   },
 
   callbacks: {
@@ -72,7 +94,21 @@ export const authOptions: NextAuthOptions = {
     // jwt is used for client side rendering
     // minimizing network requests
 
+    // async signIn({ user, account }) {
+    //   if (account?.provider === "email" && !user?.isVerified) {
+    //     //TODO: should be transactions
+    //     await User.updateOne({ _id: user._id }, { isVerified: true });
+    //     user.isVerified = true;
+    //   }
+    //
+    //   if (account?.provider === "credentials" && !user.isVerified) {
+    //     throw new Error("Please verify your email first.");
+    //   }
+    //   return true;
+    // },
+
     // session will recieve the user from authorize method and then this user will be available in jwt via session
+
     async session({ session, token }) {
       if (session?.user) {
         session.user._id = token._id;
@@ -102,5 +138,6 @@ export const authOptions: NextAuthOptions = {
     maxAge: 24 * 60 * 60,
     updateAge: 4 * 60 * 60,
   },
+  // adapter: MongoDBAdapter(clientPromise),
   secret: process.env.NEXTAUTH_SECRET,
 };
