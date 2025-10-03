@@ -75,13 +75,24 @@
 
 ## Atlas Search Index:
 -{
-  mappings: {
-    dynamic: false,
-    fields: {
-      title: { type: "string" },
-      markdown: { type: "string" },
-    },
-  },
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "title": {
+        "type": "autocomplete",
+        "tokenization": "edgeGram",
+        "minGrams": 3,
+        "maxGrams": 7,
+        "foldDiacritics": true
+      },
+      "markdown": {
+        "type": "autocomplete",
+        "tokenization": "edgeGram",
+        "minGrams": 2,
+        "maxGrams": 15,
+        "foldDiacritics": true
+      }
+    }
+  }
 }
-
 ## (focusing on the backend rn)

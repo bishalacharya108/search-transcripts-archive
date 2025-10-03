@@ -63,93 +63,101 @@ const TranscriptionPage: NextPage = () => {
 
     return (
         <div className="p-4 shadow-md rounded-lg mb-4 mx-5 bg-white">
-            <h1 className="text-2xl font-bold mb-4">Upload your Transcription</h1>
+            <h1 className="text-xl font-normal uppercase mb-3">Upload your Transcription</h1>
 
             {error && <div className="text-red-500 mb-4">{error}</div>}
 
-            <form onSubmit={handleSubmit}>
+            <hr className="mb-1.5" />
+            <div className="flex justify-evenly">
+                <Image src={"/upload.svg"} className="align-top h-20" width={50} height={50} alt="Upload"></Image>
 
-                {/* title section */}
-                <div className="mb-4">
-                    <label
-                        htmlFor="title"
-                        className="block text-lg font-medium text-gray-300"
-                    >
-                        Title
-                    </label>
-                    <input
-                        type="text"
-                        id="title"
-                        required
-                        value={title}
-                        onChange={handleTitleChange}
-                        className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Enter the transcription title"
-                    />
-                </div>
+                <form onSubmit={handleSubmit} className="w-2/3">
 
-                {/* video url section */}
-                <div className="mb-4">
-                    <label
-                        htmlFor="videoUrl"
-                        className="block text-lg font-medium text-gray-300"
-                    >
-                        <span className="label-text">Video URL</span>
-                    </label>
-                    <input
-                        type="text"
-                        id="videoUrl"
-                        value={videoUrl}
-                        required
-                        onChange={handleVideoUrlChange}
-                        className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Enter the youtube video url"
-                    />
-                </div>
+                    {/* title section */}
+                    <div className="mb-4">
+                        <label
+                            htmlFor="title"
+                            className="block text-lg font-medium text-gray-300"
+                        >
+                            Title
+                        </label>
+                        <input
+                            type="text"
+                            id="title"
+                            required
+                            value={title}
+                            onChange={handleTitleChange}
+                            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Enter the transcription title"
+                        />
+                    </div>
 
-                {/* markdown input section */}
-                <div className="mb-4">
-                    <label
-                        htmlFor="markdown"
-                        className="block text-lg font-medium text-gray-300"
-                    >
-                        Transcription Content (Markdown)
-                    </label>
-                    <textarea
-                        id="markdown"
-                        value={markdown}
-                        onChange={handleMarkdownChange}
-                        rows={10}
-                        required
-                        className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40"
-                        placeholder="Enter transcription content in Markdown format"
-                    />
-                </div>
+                    {/* video url section */}
+                    <div className="mb-4">
+                        <label
+                            htmlFor="videoUrl"
+                            className="block text-lg font-medium text-gray-300"
+                        >
+                            <span className="label-text">Video URL</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="videoUrl"
+                            value={videoUrl}
+                            required
+                            onChange={handleVideoUrlChange}
+                            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Enter the youtube video url"
+                        />
+                    </div>
 
-                <div className="flex">
-                    <Link href={"/"}>
+                    {/* markdown input section */}
+                    <div className="mb-4">
+                        <label
+                            htmlFor="markdown"
+                            className="block text-lg font-medium text-gray-300"
+                        >
+                            Transcription Content (Markdown)
+                        </label>
+                        <textarea
+                            id="markdown"
+                            value={markdown}
+                            onChange={handleMarkdownChange}
+                            rows={10}
+                            required
+                            className="w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40"
+                            placeholder="Enter transcription content in Markdown format"
+                        />
+                    </div>
 
-                        {/*TODO: Cancel button should only be active if any of the three inputs have some entry*/}
+                    <div className="flex">
+                        <Link href={"/"}>
+
+                            {/*TODO: Cancel button should only be active if any of the three inputs have some entry*/}
+                            <button
+                                type="submit"
+                                className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-error
+                `}
+                            >
+                                Cancel
+                            </button>
+                        </Link>
+
+                        {/*TODO: Upload button should only be active if all three inputs have some entry*/}
                         <button
                             type="submit"
-                            className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-error
-          `}
+                            disabled={loading}
+                            className={`w-40 btn py-2 px-4 bg-[#F7B24D] btn-info ml-5 text-black rounded-md shadow-md border-none hover:bg-green-500 hover:text-white ${loading ? "opacity-50" : "hover:btn-accent"
+                                }`}
                         >
-                            Cancel
+                            {loading ? "Uploading..." : "Upload"}
                         </button>
-                    </Link>
+                    </div>
 
-                    {/*TODO: Upload button should only be active if all three inputs have some entry*/}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className={`w-40 btn py-2 px-4 bg-[#F7B24D] btn-info ml-5 text-black rounded-md shadow-md border-none hover:bg-green-500 hover:text-white ${loading ? "opacity-50" : "hover:btn-accent"
-                            }`}
-                    >
-                        {loading ? "Uploading..." : "Upload"}
-                    </button>
-                </div>
-            </form>
+                </form>
+
+                <Image src={"/aum_dark.svg"} width={200} height={200} alt="Upload"></Image>
+            </div>
             {/*Modal*/}
             <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle text-center ">
                 <div className="translate-0 p-2 bg-base-200 w-[40vw] h-[50vh] inset-0 rounded-md">
