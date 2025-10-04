@@ -5,9 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/config/db";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { revalidatePath } from "next/cache";
+import { TranscriptServices } from "@/modules/transcription/transcriptions.services";
 
 export async function POST(req: NextRequest) {
-  // TODO: we should probably check the role of the user here, because admins and verified users can upload only
+  // TODO: check the role of the user here, because admins and verified users can upload only
   // if (!session) {
   //   return NextResponse.json(
   //     {
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
     // getting data using controllers. still undecided on whether to use controllers in cases like these
     // probably will delete controllers later and directly call from services
     const result = await TranscriptControllers.createTranscript(validatedData);
+    // const result =  await TranscriptServices.createTranscriptIntoDB(data);
     revalidatePath("/dashboard");
     revalidatePath("/admin");
 
