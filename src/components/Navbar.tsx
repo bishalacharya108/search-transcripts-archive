@@ -6,7 +6,6 @@ import Image from "next/image";
 import Navlinks from "./Navlinks";
 
 export default async function Navbar() {
-
     const session = await getServerSession(authOptions)
     return (
         <div className="navbar bg-base-100 shadow-sm fixed z-10 w-full">
@@ -47,16 +46,19 @@ export default async function Navbar() {
                     </Image>
                 </Link>
 
-                <span className="pl-2 mt-1 text-sm align-bottom bottom-2">Transcription</span>
-                    
+                <span className="pl-1 mt-2 text-xs align-bottom ">Transcription</span>
+
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1"><Navlinks session={session}></Navlinks></ul>
             </div>
+            {/* <a href="https://dharmacentral.com/" >Return to Main Website</a>*/}
+
             {
                 // status === "authenticated" && (
                 session && (
-                    <div className="navbar-end">
+                    //TODO: add name of the user in the navbar?
+                    <div className="navbar-end mr-2">
                         <LogoutButton />
                     </div>
                 )

@@ -52,6 +52,7 @@ export async function GET(req: NextRequest) {
     //   .limit(50);
 
     // manually add the required json into search index of mongodb to use this
+    // TODO: make title the higher priority
     const results = await ApprovedTranscript.aggregate([
       {
         $search: {

@@ -85,6 +85,7 @@ export default function EditPage({
 
     return (
         <div className="p-4">
+            {/*TODO: Editing can only be done by Admin and verified Contributors*/}
             <button
                 className="btn btn-secondary my-1"
                 onClick={() => setIsEditing(!isEditing)}
