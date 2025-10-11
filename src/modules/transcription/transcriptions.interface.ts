@@ -5,9 +5,10 @@ export type TTranscript = {
   markdown: string;
   videoUrl?: string;
   status: 'pending' | 'approved' | "rejected";
+  createdBy: Types.ObjectId; 
 };
 
 // For mongoose
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface ITranscript extends TTranscript, Document {}

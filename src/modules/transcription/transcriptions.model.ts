@@ -8,13 +8,13 @@ export const TranscriptSchema = new Schema<TTranscript>(
       type: String,
       required: true,
       trim: true,
-      index:true
+      index: true,
     },
     markdown: {
       type: String,
       required: [true, "Content is required"],
       minlength: [100, "Content must be at least 100 characters"],
-      index: true
+      index: true,
     },
     videoUrl: {
       type: String,
@@ -33,13 +33,17 @@ export const TranscriptSchema = new Schema<TTranscript>(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User", 
+      required: [true, "No user found"],
+    },
   },
   { timestamps: true },
 );
 
 // Infer document type
 export type TranscriptDocument = HydratedDocument<TTranscript>;
-
 
 // if model already exists then use that otherwise create a new one
 export const Transcript =

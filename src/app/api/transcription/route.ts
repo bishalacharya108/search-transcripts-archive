@@ -6,6 +6,8 @@ import connectDB from "@/config/db";
 import { TranscriptControllers } from "@/modules/transcription/transcriptions.controller";
 import { revalidatePath } from "next/cache";
 import { TranscriptServices } from "@/modules/transcription/transcriptions.services";
+import { getToken } from "next-auth/jwt";
+import mongoose, { Types } from "mongoose";
 
 export async function POST(req: NextRequest) {
   // TODO: check the role of the user here, because admins and verified users can upload only
@@ -19,10 +21,16 @@ export async function POST(req: NextRequest) {
   //   );
   // }
 
+  const secret = process.env.NEXTAUTH_SECRET;
+  const token = await getToken({ req, secret });
+
   await connectDB().then(() => console.log("DB connecition Completed"));
 
   try {
-    const data = await req.json();
+    let data = await req.json();
+     const createdBy = new mongoose.Types.ObjectId(token?._id);
+    data = {...data, createdBy}
+    console.log(data);
     const validatedData = TranscriptValidationSchema.parse(data);
 
     // getting data using controllers. still undecided on whether to use controllers in cases like these
