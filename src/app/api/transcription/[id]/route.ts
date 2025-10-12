@@ -136,7 +136,7 @@ export async function DELETE(
 ) {
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getToken({ req, secret });
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
   //  we should probably check the role of the user here, because admins and verified users can upload only
   if (token?.role != "admin") {
     return NextResponse.json(

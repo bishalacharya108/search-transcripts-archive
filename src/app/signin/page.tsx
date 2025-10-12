@@ -1,6 +1,6 @@
 "use client";
 import AuthForm from "@/components/AuthForm";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import Loading from "@/components/Loading";
@@ -9,9 +9,11 @@ import Loading from "@/components/Loading";
 // TODO: sign in should redirect to the page the user was wanting to navigate to
 export default function SigninPage() {
     const router = useRouter();
-
-    const [errorMessage, setErrorMessage] = useState("");
+    const searchParams = useSearchParams();
+    const error = searchParams.get("error");
+    const [errorMessage, setErrorMessage] = error ? useState(error) : useState("");
     const [showToast, setShowToast] = useState(false);
+    // if (error) setErrorMessage(error)
 
     const handleSignin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -38,6 +40,7 @@ export default function SigninPage() {
                     // Revalidate the path to ensure the session is up to date
                     router.push("/"), 500);
             }
+            console.log(res);
         } catch (error: any) {
             const message =
                 error?.response?.data?.message ||

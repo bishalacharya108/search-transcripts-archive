@@ -1,9 +1,10 @@
+import Previous from '@/components/Previous';
 import React from 'react';
 
 const Page = () => {
     return (
         <div>
-            This is the about page
+            <Previous></Previous>
         </div>
     );
 };

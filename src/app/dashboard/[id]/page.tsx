@@ -32,7 +32,7 @@ export default async function Expand({ params, searchParams }) {
     const convertedUrl = getYouTubeEmbedUrl(transcript?.videoUrl);
 
     return (
-        <div>
+        <div className="bg-white">
             {
                 transcript &&
                 <div className="max-w-7xl mx-auto p-6">

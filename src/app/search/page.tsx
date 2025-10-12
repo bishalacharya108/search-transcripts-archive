@@ -10,6 +10,7 @@ export default function SearchComponent() {
     const handleSearchInput = (e) => {
         setSearchValue(e.target.value)
     }
+    //TODO: show a loading component until the results are fetched
     const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {

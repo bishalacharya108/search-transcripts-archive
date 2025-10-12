@@ -51,6 +51,7 @@ export async function PATCH(
     );
   }
   await connectDB();
+  //TODO: approved docs should be able to be changed into pending or rejected by admins
   try {
     const { data } = await req.json();
     if (data.status !== "approved") {

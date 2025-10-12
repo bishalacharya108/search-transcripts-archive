@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
     // const result =  await TranscriptServices.createTranscriptIntoDB(data);
     revalidatePath("/dashboard");
     revalidatePath("/admin");
+    revalidatePath("/add")
 
     return NextResponse.json(
       {

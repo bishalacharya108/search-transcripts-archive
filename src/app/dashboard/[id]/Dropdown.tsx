@@ -1,7 +1,7 @@
 //TODO: should be giving some effective types here
 export const Dropdown = ({ handleSelect, setIsOpen, isOpen, status }) => {
 
-    const options = ["pending", "approved"]
+    const options = ["pending", "approved", "rejected"]
     return (
         <div className="relative  inline-block text-left text-black">
             <button

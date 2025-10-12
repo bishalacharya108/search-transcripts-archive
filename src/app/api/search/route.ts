@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
   const start = (Number(page) - 1) * Number(perPage);
   const end = start + Number(perPage);
 
-  //TODO: Search value should have a limit to string length
+  //TODO: Search value should have a limit to string length- a min and a max
   if (!searchValue) {
     // TODO: do a better error handling
     return NextResponse.json({
@@ -53,6 +53,7 @@ export async function GET(req: NextRequest) {
 
     // manually add the required json into search index of mongodb to use this
     // TODO: make title the higher priority
+    // TODO: set up a min number of letters to be typed for the search to be initiated
     const results = await ApprovedTranscript.aggregate([
       {
         $search: {
