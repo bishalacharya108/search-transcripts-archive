@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Navlinks({ session }: { session: any }) {
+    //TODO: only authorized users will have access to upload page
     const pathname = usePathname()
     const isActive = (href: string) => {
         return pathname === href ? "text-black font-semibold bg-[#F8B447]" : "";
@@ -12,9 +13,14 @@ export default function Navlinks({ session }: { session: any }) {
 
     return (
         <>
-            <li>
-                <Link href={"/"} className={isActive("/")}>Home</Link>
-            </li>
+            {
+                /*
+                    
+                    */
+                <li>
+                    <Link href={"/"} className={isActive("/")}>Home</Link>
+                </li>
+            }
 
             {session &&
                 <li>

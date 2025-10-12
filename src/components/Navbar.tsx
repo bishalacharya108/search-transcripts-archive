@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { LogoutButton } from "./LogoutBtn";
 import { getServerSession } from "next-auth";
@@ -5,8 +6,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import Image from "next/image";
 import Navlinks from "./Navlinks";
 
-export default async function Navbar() {
-    const session = await getServerSession(authOptions)
+export default  function Navbar({ session }: { session: any }) {
+    // const session = await getServerSession(authOptions)
     return (
         <div className="navbar bg-base-100 shadow-sm fixed z-10 w-full">
             <div className="navbar-start">
@@ -46,19 +47,32 @@ export default async function Navbar() {
                     </Image>
                 </Link>
 
-                <span className="pl-1 mt-2 text-xs align-bottom ">Transcription</span>
+
+                    <span className="pl-1 mt-1 text-xs align-bottom uppercase">Transcription</span>
 
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1"><Navlinks session={session}></Navlinks></ul>
+                <ul>
+                    <li className="text-xs p-2">
+                        <div className="flex">
+                            <Image width={20} height={20} src={"/back.svg"} alt="back"></Image>
+                            <a href="https://dharmacentral.com/" className="ml-1"> Return to Main Website</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
             {/* <a href="https://dharmacentral.com/" >Return to Main Website</a>*/}
 
             {
                 // status === "authenticated" && (
                 session && (
+
                     //TODO: add name of the user in the navbar?
                     <div className="navbar-end mr-2">
+                        <div className="px-5 text-xs">
+                            {session?.user?.userName}
+                        </div>
                         <LogoutButton />
                     </div>
                 )
