@@ -3,7 +3,23 @@ import connectDB from "@/config/db";
 import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model";
 import { Transcript } from "@/modules/transcription/transcriptions.model";
 import { getServerSession } from "next-auth";
+import Image from "next/image";
 
+function StatusIcon({ status }: { status: string }) {
+    switch (status) {
+        case "pending":
+            return <Image width={20} height={20} src="/pending.svg" alt="Pending" />;
+        case "approved":
+            return <Image width={20} height={20} src="/checkbox.svg" alt="Approved" />;
+        case "rejected":
+            return <Image width={20} height={20} src="/rejected.svg" alt="Rejected" />;
+        default:
+            return null;
+    }
+}
+
+
+//TODO: pagination
 export default async function Previous() {
     const session = await getServerSession(authOptions);
     //TODO: also check if user is authorized
@@ -11,8 +27,6 @@ export default async function Previous() {
         return <div>Unauthorized</div>;
     }
 
-    console.log(session)
-    const userName = session.user.userName;
     const userId = session.user._id;
 
     await connectDB();
@@ -26,30 +40,34 @@ export default async function Previous() {
     const merged = [...transcripts, ...transcripts2];
 
     return (
-        <div className="p-4 bg-white">
-            <h2>User: {userName}</h2>
-            <div className="overflow-x-auto">
-                <table className="table table-xs table-pin-rows border-collapse">
-                    <thead className="border-b border-[#00000040]">
-                        <tr>
-                            <th className="font-semibold">Previous Uploads</th>
-                            <th className="font-semibold">Uploaded</th>
-                            <th className="font-semibold">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div className="p-4 bg-white rounded-md">
+            {merged &&
 
-                        {merged.map((t: any) => (
-                            <tr key={t._id} className="hover:bg-gray-50 border-none">
-                                <td className="hover:cursor-pointer"><span className="text-gray-400 mr-1">›</span>{t?.title}</td>
-                                <td className="hover:cursor-pointer">{new Date(t?.createdAt).toLocaleString()}</td>
-                                <td className="hover:cursor-pointer">{t?.status}</td>
+                <div className="overflow-x-auto">
+                    <table className="table table-xs table-pin-rows border-collapse">
+                        <thead className="border-b border-[#00000040]">
+                            <tr>
+                                <th className="font-semibold">Previous Uploads</th>
+                                <th className="font-semibold">Uploaded</th>
+                                <th className="font-semibold">Status</th>
                             </tr>
-                        ))}
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
-            </div>
+                            {merged.map((t: any) => (
+                                <tr key={t._id} className="text-2xl font-normal hover:bg-gray-50 border-none">
+                                    <td className="hover:cursor-pointer"><span className="text-gray-400 mr-1 text-lg font-semibold">›</span>{t?.title}</td>
+                                    <td className="hover:cursor-pointer">{new Date(t?.createdAt).toLocaleString()}</td>
+                                    <td className="hover:cursor-pointer ">
+                                    <StatusIcon status={t?.status}></StatusIcon>
+                                    </td>
+                                </tr>
+                            ))}
+
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     );
 }
