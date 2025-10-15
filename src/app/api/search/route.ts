@@ -1,5 +1,6 @@
 import connectDB from "@/config/db";
 import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model";
+import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 const indexDef = {
@@ -22,48 +23,82 @@ const indexDef = {
   },
 };
 
+const indexDefWithString = {
+  mappings: {
+    dynamic: false,
+    fields: {
+      title: [
+        {
+          type: "autocomplete",
+          tokenization: "edgeGram",
+          minGrams: 3,
+          maxGrams: 7,
+        },
+        {
+          type: "string",
+        },
+      ],
+      markdown: [
+        {
+          type: "autocomplete",
+          tokenization: "edgeGram",
+          minGrams: 2,
+          maxGrams: 15,
+        },
+        {
+          type: "string",
+        },
+      ],
+    },
+  },
+};
+
+// currently we only have load more pagination
+//TODO: should have next and previous pagination system
 export async function GET(req: NextRequest) {
-  connectDB();
+  await connectDB();
+
   const { searchParams } = new URL(req.url);
   const searchValue = searchParams.get("searchValue");
-  console.log("Hit:", searchValue);
-
-  //pagination
-  const page = searchParams.get("page") ?? "1";
   const perPage = 5;
-  const start = (Number(page) - 1) * Number(perPage);
-  const end = start + Number(perPage);
+  const lastScore = parseFloat(searchParams.get("lastScore") || "Infinity");
+  const lastId = searchParams.get("lastId");
 
-  //TODO: Search value should have a limit to string length- a min and a max
   if (!searchValue) {
-    // TODO: do a better error handling
     return NextResponse.json({
       success: false,
       message: "No search params",
     });
   }
-  try {
-    //basic text searching
-    // const results = await ApprovedTranscript.find(
-    //   { $text: { $search: searchValue } },
-    //   { score: { $meta: "textScore" } },
-    // )
-    //   .sort({ score: { $meta: "textScore" } })
-    //   .limit(50);
 
-    // manually add the required json into search index of mongodb to use this
-    // TODO: make title the higher priority
-    // TODO: set up a min number of letters to be typed for the search to be initiated
-    const results = await ApprovedTranscript.aggregate([
+  try {
+    const pipeline: any[] = [
       {
         $search: {
           compound: {
             should: [
               {
+                text: {
+                  query: searchValue,
+                  path: "title",
+                  fuzzy: { maxEdits: 1, prefixLength: 3 },
+                  score: { boost: { value: 8 } },
+                },
+              },
+              {
                 autocomplete: {
                   query: searchValue,
                   path: "title",
+                  fuzzy: { maxEdits: 2, prefixLength: 2 },
+                  score: { boost: { value: 6 } },
+                },
+              },
+              {
+                text: {
+                  query: searchValue,
+                  path: "markdown",
                   fuzzy: { maxEdits: 1, prefixLength: 2 },
+                  score: { boost: { value: 4 } },
                 },
               },
               {
@@ -71,35 +106,58 @@ export async function GET(req: NextRequest) {
                   query: searchValue,
                   path: "markdown",
                   fuzzy: { maxEdits: 1, prefixLength: 2 },
+                  score: { boost: { value: 2 } },
                 },
               },
             ],
           },
-          highlight: {
-            path: ["markdown", "title"],
-          },
+          highlight: { path: ["markdown", "title"] },
         },
       },
-      { $limit: 10 },
+
       {
         $project: {
           title: 1,
           markdown: 1,
           highlights: { $meta: "searchHighlights" },
+          score: { $meta: "searchScore" },
         },
       },
-    ]);
-    console.log("Results count:", results.length);
-    const data = results.slice(start, end);
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Successfully Retrieved search results",
-        data: data,
-      },
-      { status: 200 },
-    );
-  } catch {
+    ];
+
+    if (lastId && lastScore !== Infinity) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { score: { $lt: lastScore } },
+            { score: lastScore, _id: { $gt: new Types.ObjectId(lastId) } },
+          ],
+        },
+      });
+    }
+
+    pipeline.push({ $sort: { score: -1, _id: 1 } });
+
+    pipeline.push({ $limit: perPage + 1 });
+
+    const results = await ApprovedTranscript.aggregate(pipeline);
+
+    const hasNextPage = results.length > perPage;
+    const slicedResults = hasNextPage ? results.slice(0, perPage) : results;
+
+    const lastDoc = slicedResults[slicedResults.length - 1];
+    const nextPageCursor = hasNextPage
+      ? { lastScore: lastDoc.score, lastId: lastDoc._id }
+      : null;
+
+    return NextResponse.json({
+      success: true,
+      results: slicedResults,
+      hasNextPage,
+      nextPageCursor,
+    });
+  } catch (err) {
+    console.error(err);
     return NextResponse.json(
       {
         success: false,
