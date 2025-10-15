@@ -3,26 +3,25 @@ import { ApprovedTranscript } from "@/modules/approvedTranscript/approved.model"
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
+//no autocomplete here anymore
+//TODO: need to create a separate api for highlight later 
 const indexDef = {
   mappings: {
     dynamic: false,
     fields: {
       title: {
-        type: "autocomplete",
-        tokenization: "edgeGram",
-        minGrams: 3,
-        maxGrams: 7,
+        type: "string",
+        analyzer: "lucene.english",
       },
       markdown: {
-        type: "autocomplete",
-        tokenization: "edgeGram",
-        minGrams: 2,
-        maxGrams: 15,
+        type: "string",
+        analyzer: "lucene.english",
       },
     },
   },
 };
 
+//not in use
 const indexDefWithString = {
   mappings: {
     dynamic: false,
@@ -58,6 +57,7 @@ const indexDefWithString = {
 export async function GET(req: NextRequest) {
   await connectDB();
 
+  //TODO: there should be a limit to how big the searchParam can be
   const { searchParams } = new URL(req.url);
   const searchValue = searchParams.get("searchValue");
   const perPage = 5;
@@ -70,51 +70,106 @@ export async function GET(req: NextRequest) {
       message: "No search params",
     });
   }
+  //Advanced searching
+  const isExactQuery = searchValue.startsWith('"') && searchValue.endsWith('"');
+  const cleanSearchValue = isExactQuery
+    ? searchValue.slice(1, -1)
+    : searchValue;
+  const isPhrase = cleanSearchValue?.includes(" ");
 
   try {
+    let shouldArray = [];
+
+    if (isExactQuery) {
+      // Exact query
+      shouldArray = [
+        {
+          phrase: {
+            query: cleanSearchValue,
+            path: "title",
+            slop: 0,
+            score: { boost: { value: 18 } },
+          },
+        },
+        {
+          text: {
+            query: cleanSearchValue,
+            path: "title",
+            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            score: { boost: { value: 8 } },
+          },
+        },
+        {
+          text: {
+            query: cleanSearchValue,
+            path: "markdown",
+            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            score: { boost: { value: 4 } },
+          },
+        },
+      ];
+    } else if (isPhrase) {
+      // Phrase
+      shouldArray = [
+        {
+          phrase: {
+            query: cleanSearchValue,
+            path: "title",
+            slop: 2,
+            score: { boost: { value: 15 } },
+          },
+        },
+        {
+          text: {
+            query: cleanSearchValue,
+            path: "title",
+            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            score: { boost: { value: 12 } },
+          },
+        },
+        {
+          text: {
+            query: cleanSearchValue,
+            path: "markdown",
+            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            score: { boost: { value: 4 } },
+          },
+        },
+      ];
+    } else {
+      // single word query
+      shouldArray = [
+        {
+          text: {
+            query: cleanSearchValue,
+            path: "title",
+            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            score: { boost: { value: 12 } },
+          },
+        },
+        {
+          text: {
+            query: cleanSearchValue,
+            path: "markdown",
+            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            score: { boost: { value: 4 } },
+          },
+        },
+      ];
+    }
+
     const pipeline: any[] = [
       {
         $search: {
           compound: {
-            should: [
-              {
-                text: {
-                  query: searchValue,
-                  path: "title",
-                  fuzzy: { maxEdits: 1, prefixLength: 3 },
-                  score: { boost: { value: 8 } },
-                },
-              },
-              {
-                autocomplete: {
-                  query: searchValue,
-                  path: "title",
-                  fuzzy: { maxEdits: 2, prefixLength: 2 },
-                  score: { boost: { value: 6 } },
-                },
-              },
-              {
-                text: {
-                  query: searchValue,
-                  path: "markdown",
-                  fuzzy: { maxEdits: 1, prefixLength: 2 },
-                  score: { boost: { value: 4 } },
-                },
-              },
-              {
-                autocomplete: {
-                  query: searchValue,
-                  path: "markdown",
-                  fuzzy: { maxEdits: 1, prefixLength: 2 },
-                  score: { boost: { value: 2 } },
-                },
-              },
-            ],
+            should: shouldArray,
           },
-          highlight: { path: ["markdown", "title"] },
+          highlight: {
+            path: ["title", "markdown"],
+            maxNumPassages: 2, //either I will later remove this or update it to 3
+          },
         },
       },
-
       {
         $project: {
           title: 1,
@@ -124,7 +179,6 @@ export async function GET(req: NextRequest) {
         },
       },
     ];
-
     if (lastId && lastScore !== Infinity) {
       pipeline.push({
         $match: {

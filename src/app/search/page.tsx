@@ -14,7 +14,6 @@ export default function SearchComponent() {
     const [error, setError] = useState<string | null>(null);
 
 
-    //TODO: loading next and previous page
     const fetchResults = async (append = false) => {
         try {
             setLoading(true);
@@ -33,6 +32,7 @@ export default function SearchComponent() {
 
 
             // Append results if loading next page
+            // TODO: need to change it and add next and previous button based pagination
             setResults(prev => append ? [...prev, ...fetchedResults] : fetchedResults);
             setNextPageCursor(cursor);
             setHasNextPage(hasNextPage);
@@ -93,6 +93,7 @@ export default function SearchComponent() {
                 {error && <p className="text-center text-red-500">{error}</p>}
                 {!results && <p className="text-center text-red-500">Nothing Searched Yet</p>}
 
+                {/*TODO: result length is not correct need to correct it*/}
                 {results.length > 0 && (
                     <>
                         <div className="text-[#50DA48] mb-1.5">Found {results.length} results for "{searchUiParam}"</div>

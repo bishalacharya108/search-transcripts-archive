@@ -1,7 +1,6 @@
 export default function getYouTubeEmbedUrl(videoUrl: string): string {
   if (!videoUrl) return "";
 
-  // Robust regex to handle most YouTube URL formats
   const regex = /^(?:https?:\/\/)?(?:www\.|m\.)?(?:youtu\.be\/|youtube(?:music)?\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|live\/|playlist\?.*?v=|.*?\/live\/))([\w-]{11})(?:[&\?].*)?$/;
 
   const match = videoUrl.match(regex);
@@ -10,6 +9,7 @@ export default function getYouTubeEmbedUrl(videoUrl: string): string {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
 
-  return ""; // fallback for non-YouTube or invalid URLs
+  return ""; 
 }
+
 

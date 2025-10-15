@@ -1,5 +1,5 @@
 
-// felt more comfortable with directly using types instead of interfaces
+//TODO: using somekind of an original-author field which is by default equal to createdBy but can be changed if the author is different
 export type TTranscript = {
   title: string;
   markdown: string;

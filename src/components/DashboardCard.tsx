@@ -1,5 +1,3 @@
-// import { TTranscript } from "@/modules/transcription/transcriptions.interface";
-// import { describe } from "node:test";
 import Link from "next/link";
 import React from "react";
 
@@ -8,7 +6,7 @@ const DashboardCard = ({ transcript, approved = false }) => {
 
     return (
         <div>
-            <div className="card w-[50rem] bg-base-100 card-md shadow-lg mx-auto rounded-none">
+            <div className="card w-[50rem] bg-base-100 border-b card-md shadow-lg mx-auto rounded-none">
                 <div className="card-body pt-2 pb-1">
                     <h2 className="card-title">Title: {title}</h2>
                     <p className="line-clamp-4">
@@ -22,7 +20,9 @@ const DashboardCard = ({ transcript, approved = false }) => {
                         {/*sending approved status as query*/}
                         {/*TODO: add effect for loading expand*/}
                         <Link href={{ pathname: `/dashboard/${_id}`, query: { approved } }}>
-                            <button className="btn btn-primary">Expand</button></Link>
+                            <button className="btn btn-info text-white">Expand</button>
+
+                            </Link>
                     </div>
                 </div>
             </div>

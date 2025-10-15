@@ -135,6 +135,7 @@ export default function EditPage({
                         {videoUrl && (
                             <div className="mb-4">
                                 <iframe
+                                    key={videoUrl}
                                     width="853"
                                     height="480"
                                     src={videoUrl}

@@ -40,7 +40,7 @@ export default async function Previous() {
     const merged = [...transcripts, ...transcripts2];
 
     return (
-        <div className="p-4 bg-white rounded-md">
+        <div className="p-4 bg-white rounded-md w-[54rem]">
             {merged &&
 
                 <div className="overflow-x-auto">
