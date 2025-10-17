@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NextPage } from "next";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 //TODO: use this as a component inside this page.tsx, that way this page.tsx will be server side (important for using the Previous component in this page.tsx)
 const TranscriptionPage: NextPage = () => {
@@ -11,6 +12,7 @@ const TranscriptionPage: NextPage = () => {
     const [markdown, setMarkdown] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const router = useRouter();
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
@@ -47,6 +49,7 @@ const TranscriptionPage: NextPage = () => {
             setMarkdown("");
             setVideoUrl("");
             document.getElementById('my_modal_5').showModal();
+            router.refresh();
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -139,7 +142,6 @@ const TranscriptionPage: NextPage = () => {
 
                             {/*Submit section*/}
                             <div className="flex  my-4  flex-col-reverse justify-evenly gap-1">
-
                                 <button
                                     type="submit"
                                     className={`w-40 btn py-2 px-4 btn-info text-white rounded-md shadow-md hover:btn-error
@@ -150,7 +152,6 @@ const TranscriptionPage: NextPage = () => {
                                     Cancel
                                 </button>
 
-                                {/*TODO: Upload button should only be active if all three inputs have some entry*/}
                                 <button
                                     type="submit"
                                     disabled={loading || !(title && markdown && videoUrl)}
@@ -163,10 +164,7 @@ const TranscriptionPage: NextPage = () => {
                         </div>
                     </div>
                 </form>
-
-                {/* <Image src={"/aum_dark.svg"} width={200} height={200} alt="Upload"></Image>*/}
             </div>
-
 
             {/*Modal*/}
             <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle text-center ">

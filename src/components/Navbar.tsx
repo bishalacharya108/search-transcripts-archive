@@ -62,13 +62,11 @@ export default  function Navbar({ session }: { session: any }) {
                     </li>
                 </ul>
             </div>
-            {/* <a href="https://dharmacentral.com/" >Return to Main Website</a>*/}
 
             {
                 // status === "authenticated" && (
                 session && (
 
-                    //TODO: add name of the user in the navbar?
                     <div className="navbar-end mr-2">
                         <div className="px-5 text-xs">
                             {session?.user?.userName}

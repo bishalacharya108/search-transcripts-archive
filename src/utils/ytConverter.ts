@@ -5,7 +5,6 @@ export default function getYouTubeEmbedUrl(videoUrl: string): string {
 
   const match = videoUrl.match(regex);
   if (match && match[1]) {
-    // Return embeddable URL
     return `https://www.youtube.com/embed/${match[1]}`;
   }
 

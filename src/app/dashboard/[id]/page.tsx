@@ -37,14 +37,6 @@ export default async function Expand({ params, searchParams }) {
                 transcript &&
                 <div className="max-w-7xl mx-auto p-6">
                     <div className="  rounded-xl shadow-md p-8">
-                        <div className="mb-3">
-                            {/*linking to all transcripts page*/}
-                            <Link href={"/admin"}>
-                                <button className="btn btn-soft">
-                                    All Transcripts
-                                </button>
-                            </Link>
-                        </div>
                         {transcript?.createdAt && <p className="text-sm text-gray-500 mb-6">
                             Upload Date: {readableDate}
                         </p>}

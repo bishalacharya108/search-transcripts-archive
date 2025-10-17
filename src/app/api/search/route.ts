@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 //no autocomplete here anymore
-//TODO: need to create a separate api for highlight later 
+//TODO: need to create a separate api for highlight later
 const indexDef = {
   mappings: {
     dynamic: false,
@@ -95,7 +95,6 @@ export async function GET(req: NextRequest) {
           text: {
             query: cleanSearchValue,
             path: "title",
-            // fuzzy: { maxEdits: 1, prefixLength: 2 },
             score: { boost: { value: 8 } },
           },
         },
@@ -103,36 +102,36 @@ export async function GET(req: NextRequest) {
           text: {
             query: cleanSearchValue,
             path: "markdown",
-            // fuzzy: { maxEdits: 1, prefixLength: 2 },
             score: { boost: { value: 4 } },
           },
         },
       ];
     } else if (isPhrase) {
       // Phrase
+      // TODO: need to have something better for phrases
       shouldArray = [
         {
           phrase: {
             query: cleanSearchValue,
             path: "title",
-            slop: 2,
-            score: { boost: { value: 15 } },
+            slop: 0,
+            score: { boost: { value: 14 } },
           },
         },
         {
-          text: {
+          phrase: {
             query: cleanSearchValue,
             path: "title",
-            // fuzzy: { maxEdits: 1, prefixLength: 2 },
+            slop: 3,
             score: { boost: { value: 12 } },
           },
         },
         {
-          text: {
+          phrase: {
             query: cleanSearchValue,
             path: "markdown",
-            // fuzzy: { maxEdits: 1, prefixLength: 2 },
-            score: { boost: { value: 4 } },
+            slop: 4,
+            score: { boost: { value: 8 } },
           },
         },
       ];
@@ -143,7 +142,6 @@ export async function GET(req: NextRequest) {
           text: {
             query: cleanSearchValue,
             path: "title",
-            // fuzzy: { maxEdits: 1, prefixLength: 2 },
             score: { boost: { value: 12 } },
           },
         },
@@ -151,7 +149,6 @@ export async function GET(req: NextRequest) {
           text: {
             query: cleanSearchValue,
             path: "markdown",
-            // fuzzy: { maxEdits: 1, prefixLength: 2 },
             score: { boost: { value: 4 } },
           },
         },

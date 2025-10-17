@@ -93,7 +93,7 @@ export default function SearchComponent() {
                 {error && <p className="text-center text-red-500">{error}</p>}
                 {!results && <p className="text-center text-red-500">Nothing Searched Yet</p>}
 
-                {/*TODO: result length is not correct need to correct it*/}
+                {/*TODO: result length is not correct, need to correct it*/}
                 {results.length > 0 && (
                     <>
                         <div className="text-[#50DA48] mb-1.5">Found {results.length} results for "{searchUiParam}"</div>
