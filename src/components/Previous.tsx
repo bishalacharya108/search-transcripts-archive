@@ -20,6 +20,7 @@ function StatusIcon({ status }: { status: string }) {
 
 
 //TODO: pagination
+//TODO: a client side searching mechanism for easy search (probably without fetching)
 export default async function Previous() {
     const session = await getServerSession(authOptions);
     //TODO: also check if user is authorized
@@ -31,6 +32,7 @@ export default async function Previous() {
 
     await connectDB();
 
+    //TODO: somehow get the documents authored by the session user, even if not uploaded by them 
     const transcripts = await Transcript.find({ createdBy: userId }, { title: 1, _id: 1, status: 1, createdAt: 1 })
         .sort({ _id: -1 })
         .limit(10);
@@ -54,7 +56,7 @@ export default async function Previous() {
                         </thead>
                         <tbody>
 
-                            {merged.map((t: any) => (
+                            {merged?.map((t: any) => (
                                 <tr key={t._id} className="text-2xl font-normal hover:bg-gray-50 border-none">
                                     <td className="hover:cursor-pointer"><span className="text-gray-400 mr-1 text-lg font-semibold">›</span>{t?.title}</td>
                                     <td className="hover:cursor-pointer">{new Date(t?.createdAt).toLocaleString()}</td>

@@ -74,25 +74,20 @@
 
 
 ## Atlas Search Index:
--{
-  "mappings": {
-    "dynamic": false,
-    "fields": {
-      "title": {
-        "type": "autocomplete",
-        "tokenization": "edgeGram",
-        "minGrams": 3,
-        "maxGrams": 7,
-        "foldDiacritics": true
+-```{
+  mappings: {
+    dynamic: false,
+    fields: {
+      title: {
+        type: "string",
+        analyzer: "lucene.english",
       },
-      "markdown": {
-        "type": "autocomplete",
-        "tokenization": "edgeGram",
-        "minGrams": 2,
-        "maxGrams": 15,
-        "foldDiacritics": true
-      }
-    }
-  }
-}
+      markdown: {
+        type: "string",
+        analyzer: "lucene.english",
+      },
+    },
+  },
+}```
+
 ## (focusing on the backend rn)

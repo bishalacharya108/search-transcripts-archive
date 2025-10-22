@@ -1,3 +1,4 @@
+//TODO: Delete this search component if not in use 
 'use client'
 import { useState } from "react";
 import axios from "axios";

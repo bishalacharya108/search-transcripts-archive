@@ -118,7 +118,7 @@ export default function SearchComponent() {
                 )}
 
                 {searchUiParam && results.length === 0 && !loading && !error && (
-                    <p className="text-center text-gray-500">Nothing found</p>
+                    <p className="text-center text-red-400">! No results found</p>
                 )}
                 {!searchUiParam && !loading && !error && (
                     <p className="text-center text-gray-500">Enter a search term to find transcripts</p>

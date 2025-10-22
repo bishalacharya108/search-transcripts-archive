@@ -1,13 +1,10 @@
 "use client"
 import Link from "next/link";
 import { LogoutButton } from "./LogoutBtn";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import Image from "next/image";
 import Navlinks from "./Navlinks";
 
 export default  function Navbar({ session }: { session: any }) {
-    // const session = await getServerSession(authOptions)
     return (
         <div className="navbar bg-base-100 shadow-sm fixed z-10 w-full">
             <div className="navbar-start">
